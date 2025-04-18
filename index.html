@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airline Staff Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0063c6;
+            --primary-dark: #004e9e;
+            --primary-light: #e6f0ff;
+            --accent-color: #e40046;
+            --accent-dark: #b80039;
+            --text-color: #2c3e50;
+            --background-color: #f8fafc;
+            --card-color: #ffffff;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 10px;
+            max-width: 100%;
+            overflow-x: hidden;
+            background-image: linear-gradient(135deg, #f8fafc 0%, #e6f0ff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            color: var(--accent-color);
+            margin-right: 5px;
+        }
+
+        .mini-card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(0, 99, 198, 0.08);
+            transition: var(--transition);
+        }
+
+        .mini-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .mini-title i {
+            margin-right: 5px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        .compact-form {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .search-row {
+            display: flex;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .adv-search-link {
+            font-size: 0.75rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .adv-search-link i {
+            font-size: 0.7rem;
+            margin-right: 3px;
+        }
+
+        .adv-search-link:hover {
+            text-decoration: underline;
+        }
+
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 99, 198, 0.08);
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        h2 i {
+            margin-right: 8px;
+            color: var(--accent-color);
+        }
+
+        /* Links Grid */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .link-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 12px 5px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            height: 100%;
+            border: 1px solid rgba(0, 99, 198, 0.1);
+        }
+
+        .link-item i {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .link-item:hover, .link-item:active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Forms */
+        input, select, button {
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        input, select {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .compact-input {
+            width: 100%;
+            min-width: 0;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 99, 198, 0.1);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            min-width: 50px;
+        }
+
+        button i {
+            margin-right: 4px;
+        }
+
+        button:hover, button:active {
+            background-color: var(--primary-dark);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 12px;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-color: #f1f5f9;
+                --background-color: #0f172a;
+                --card-color: #1e293b;
+                --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+                --primary-light: #1e3a8a;
+            }
+            
+            body {
+                background-image: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            }
+            
+            input, select {
+                background-color: #334155;
+                color: white;
+                border-color: #475569;
+            }
+            
+            .card, .mini-card {
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            
+            .link-item {
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(3px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mini-card:nth-child(1) { animation: fadeIn 0.15s ease forwards; }
+        .mini-card:nth-child(2) { animation: fadeIn 0.2s ease forwards; }
+        .card { animation: fadeIn 0.25s ease forwards; }
+        .footer { animation: fadeIn 0.3s ease forwards; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-text"><i class="fas fa-plane logo-icon"></i>Airline Staff Portal</div>
+        </div>
+
+        <!-- Condensed Flight Tracker - Vertical -->
+        <div class="mini-card">
+            <div class="mini-title"><i class="fas fa-plane-departure"></i>Track Flight</div>
+            <form id="flight-tracker-form" class="compact-form">
+                <input type="hidden" id="airline-code" value="AAL">
+                <input type="number" id="flight-number" class="compact-input" placeholder="AAL Flight #" pattern="[0-9]*" inputmode="numeric">
+                <select id="tracking-service">
+                    <option value="flightaware">FA</option>
+                    <option value="flightradar24">FR24</option>
+                </select>
+                <button type="submit"><i class="fas fa-search"></i>Go</button>
+            </form>
+        </div>
+
+        <!-- Condensed Search - Vertical -->
+        <div class="mini-card">
+            <div class="mini-title"><i class="fas fa-search"></i>Search Google</div>
+            <form id="google-search-form">
+                <div class="compact-form">
+                    <input type="text" name="q" placeholder="Search query..." id="google-search-box" class="compact-input" autocomplete="off">
+                    <button type="submit"><i class="fas fa-arrow-right"></i>Go</button>
+                </div>
+                <div class="search-row">
+                    <a href="https://www.google.com/advanced_search" target="_blank" class="adv-search-link">
+                        <i class="fas fa-cog"></i>Advanced
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="card">
+            <h2><i class="fas fa-link"></i>Quick Links</h2>
+            <div class="quick-links">
+                <a href="https://webmail.aa.com" class="link-item" target="_blank">
+                    <i class="fas fa-envelope"></i>
+                    <span>AA Email</span>
+                </a>
+                <a href="https://teams.microsoft.com/v2/" class="link-item" target="_blank">
+                    <i class="fas fa-users"></i>
+                    <span>Teams</span>
+                </a>
+                <a href="https://spteam.aa.com/sites/D5B" class="link-item" target="_blank">
+                    <i class="fas fa-building"></i>
+                    <span>ABR DFW</span>
+                </a>
+                <a href="https://airportal.aa.com/AirPortalWeb/HTML/dashboard/dashboard.html" class="link-item" target="_blank">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>AirPortal</span>
+                </a>
+                <a href="https://prime.app.bags.aa.com/web/" class="link-item" target="_blank">
+                    <i class="fas fa-suitcase"></i>
+                    <span>PRIME</span>
+                </a>
+                <a href="https://hcchold.replit.app/" class="link-item" target="_blank">
+                    <i class="fas fa-clock"></i>
+                    <span>HCC Hold</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Airline Staff Portal • Mobile Dashboard</p>
+        </div>
+    </div>
+
+    <script>
+        // Flight Tracker Form Handler
+        document.getElementById('flight-tracker-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const airlineCode = document.getElementById('airline-code').value.trim();
+            const flightNumber = document.getElementById('flight-number').value.trim();
+            const trackingService = document.getElementById('tracking-service').value;
+            
+            if (!flightNumber) {
+                alert('Please enter a flight number');
+                return;
+            }
+            
+            let url;
+            if (trackingService === 'flightradar24') {
+                url = `https://www.flightradar24.com/data/flights/${airlineCode}${flightNumber}`;
+            } else {
+                url = `https://flightaware.com/live/flight/${airlineCode}${flightNumber}`;
+            }
+            
+            window.open(url, '_blank');
+        });
+
+        // Google Search Form Handler
+        document.getElementById('google-search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const searchQuery = document.getElementById('google-search-box').value.trim();
+            
+            if (!searchQuery) {
+                return;
+            }
+            
+            const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
+            window.open(googleSearchUrl, '_blank');
+            
+            // Clear the search box after searching
+            document.getElementById('google-search-box').value = '';
+        });
+    </script>
+</body>
+</html>
