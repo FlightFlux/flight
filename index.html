@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airline Staff Portal</title>
+    <!-- Favicon and App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/android-chrome-512x512.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="assets/icons/favicon.ico">
+    <link rel="manifest" href="assets/icons/site.webmanifest">
+    <meta name="theme-color" content="#0063c6">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -259,7 +268,7 @@
         }
 
         .collapsible-content.active {
-            max-height: 500px;
+            max-height: 2000px; /* Increased for larger content */
         }
 
         h2 {
@@ -276,7 +285,7 @@
             color: var(--accent-color);
         }
 
-        /* OT Calculator Styles */
+        /* Calculator Styles */
         .form-group {
             margin-bottom: 10px;
         }
@@ -315,6 +324,88 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: var(--primary-color);
+        }
+
+        /* Aviation Reference Styles */
+        .tabs {
+            display: flex;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 99, 198, 0.2);
+        }
+
+        .tab {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: var(--text-color);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .placeholder-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .placeholder-text {
+            font-size: 0.85rem;
+            color: var(--text-color);
+        }
+
+        /* Time Calculator Styles */
+        .time-zone-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        .time-zone-select {
+            flex: 1;
+        }
+
+        /* Calculator Tabs */
+        .calc-tabs {
+            display: flex;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 99, 198, 0.2);
+        }
+
+        .calc-tab {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: var(--text-color);
+        }
+
+        .calc-tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .calc-content {
+            display: none;
+        }
+
+        .calc-content.active {
+            display: block;
         }
 
         /* Links Grid */
@@ -404,6 +495,28 @@
             margin-top: 12px;
             color: #64748b;
             font-size: 0.8rem;
+        }
+
+        /* Scrollable containers */
+        .scrollable-content {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Scrollbar styling */
+        .scrollable-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .scrollable-content::-webkit-scrollbar-track {
+            background: rgba(0, 99, 198, 0.05);
+            border-radius: 10px;
+        }
+        
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
         }
 
         /* Animations */
@@ -508,40 +621,162 @@
             </div>
         </div>
 
-        <!-- OT Calculator (Collapsible) -->
+        <!-- Aviation Reference (Collapsible) -->
         <div class="card">
-            <div class="collapsible-header" id="ot-calculator-header">
-                <h2><i class="fas fa-calculator"></i>OT Calculator</h2>
-                <i class="fas fa-chevron-down" id="collapse-icon"></i>
+            <div class="collapsible-header" id="aviation-ref-header">
+                <h2><i class="fas fa-headset"></i>Aviation Reference</h2>
+                <i class="fas fa-chevron-down" id="aviation-collapse-icon"></i>
             </div>
-            <div class="collapsible-content" id="ot-calculator-content">
-                <form id="ot-calculator-form">
-                    <!-- Scheduled Times -->
+            <div class="collapsible-content" id="aviation-ref-content">
+                <div class="tabs">
+                    <div class="tab active" data-tab="radio">Radio Phraseology</div>
+                    <div class="tab" data-tab="emergency">Emergency Procedures</div>
+                </div>
+                
+                <!-- Radio Phraseology Guide -->
+                <div class="tab-content active" id="radio-content">
+                    <div class="placeholder-title">test1234</div>
+                    <div class="placeholder-text">test4321</div>
+                </div>
+                
+                <!-- Emergency Procedures -->
+                <div class="tab-content" id="emergency-content">
+                    <div class="placeholder-title">test1234</div>
+                    <div class="placeholder-text">test4321</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculators (Collapsible) -->
+        <div class="card">
+            <div class="collapsible-header" id="calculators-header">
+                <h2><i class="fas fa-calculator"></i>Calculators</h2>
+                <i class="fas fa-chevron-down" id="calculators-collapse-icon"></i>
+            </div>
+            <div class="collapsible-content" id="calculators-content">
+                <div class="calc-tabs">
+                    <div class="calc-tab active" data-tab="ot">OT Calculator</div>
+                    <div class="calc-tab" data-tab="time">Time Converter</div>
+                </div>
+                
+                <!-- OT Calculator -->
+                <div class="calc-content active" id="ot-content">
+                    <form id="ot-calculator-form">
+                        <!-- Scheduled Times -->
+                        <div class="form-group">
+                            <label>Scheduled Shift (24hr format)</label>
+                            <div class="time-input-group">
+                                <input type="text" id="scheduled-start" placeholder="Start (0800)" maxlength="4" pattern="[0-9]*">
+                                <input type="text" id="scheduled-end" placeholder="End (1630)" maxlength="4" pattern="[0-9]*">
+                            </div>
+                        </div>
+                        
+                        <!-- Actual Times -->
+                        <div class="form-group">
+                            <label>Actual Times Worked (24hr format)</label>
+                            <div class="time-input-group">
+                                <input type="text" id="actual-start" placeholder="Start (0745)" maxlength="4" pattern="[0-9]*">
+                                <input type="text" id="actual-end" placeholder="End (1800)" maxlength="4" pattern="[0-9]*">
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="calculate-ot-btn"><i class="fas fa-calculator"></i>Calculate</button>
+                        
+                        <!-- Results -->
+                        <div class="result-container">
+                            <div class="result-label">Overtime Hours</div>
+                            <div class="result-value" id="ot-result">0.0 hours</div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Time Calculator -->
+                <div class="calc-content" id="time-content">
                     <div class="form-group">
-                        <label>Scheduled Shift (24hr format)</label>
-                        <div class="time-input-group">
-                            <input type="text" id="scheduled-start" placeholder="Start (0800)" maxlength="4" pattern="[0-9]*">
-                            <input type="text" id="scheduled-end" placeholder="End (1630)" maxlength="4" pattern="[0-9]*">
+                        <label>From Time Zone</label>
+                        <div class="time-zone-row">
+                            <select id="from-timezone" class="time-zone-select">
+                                <option value="-12">UTC-12:00 (Baker Island)</option>
+                                <option value="-11">UTC-11:00 (American Samoa)</option>
+                                <option value="-10">UTC-10:00 (Hawaii)</option>
+                                <option value="-9">UTC-09:00 (Alaska)</option>
+                                <option value="-8">UTC-08:00 (Pacific)</option>
+                                <option value="-7">UTC-07:00 (Mountain)</option>
+                                <option value="-6">UTC-06:00 (Central)</option>
+                                <option value="-5">UTC-05:00 (Eastern)</option>
+                                <option value="-4">UTC-04:00 (Atlantic)</option>
+                                <option value="-3">UTC-03:00 (Brasilia)</option>
+                                <option value="-2">UTC-02:00 (South Sandwich)</option>
+                                <option value="-1">UTC-01:00 (Azores)</option>
+                                <option value="0" selected>UTC±00:00 (London)</option>
+                                <option value="1">UTC+01:00 (Paris)</option>
+                                <option value="2">UTC+02:00 (Cairo)</option>
+                                <option value="3">UTC+03:00 (Moscow)</option>
+                                <option value="4">UTC+04:00 (Dubai)</option>
+                                <option value="5">UTC+05:00 (Karachi)</option>
+                                <option value="5.5">UTC+05:30 (Mumbai)</option>
+                                <option value="6">UTC+06:00 (Dhaka)</option>
+                                <option value="7">UTC+07:00 (Bangkok)</option>
+                                <option value="8">UTC+08:00 (Singapore)</option>
+                                <option value="9">UTC+09:00 (Tokyo)</option>
+                                <option value="9.5">UTC+09:30 (Adelaide)</option>
+                                <option value="10">UTC+10:00 (Sydney)</option>
+                                <option value="11">UTC+11:00 (Solomon Islands)</option>
+                                <option value="12">UTC+12:00 (Auckland)</option>
+                            </select>
                         </div>
                     </div>
                     
-                    <!-- Actual Times -->
                     <div class="form-group">
-                        <label>Actual Times Worked (24hr format)</label>
+                        <label>Time (24hr format)</label>
                         <div class="time-input-group">
-                            <input type="text" id="actual-start" placeholder="Start (0745)" maxlength="4" pattern="[0-9]*">
-                            <input type="text" id="actual-end" placeholder="End (1800)" maxlength="4" pattern="[0-9]*">
+                            <input type="text" id="time-hours" placeholder="HH" maxlength="2" pattern="[0-9]*">
+                            <input type="text" id="time-minutes" placeholder="MM" maxlength="2" pattern="[0-9]*">
                         </div>
                     </div>
                     
-                    <button type="button" id="calculate-ot-btn"><i class="fas fa-calculator"></i>Calculate</button>
+                    <div class="form-group">
+                        <label>To Time Zone</label>
+                        <div class="time-zone-row">
+                            <select id="to-timezone" class="time-zone-select">
+                                <option value="-12">UTC-12:00 (Baker Island)</option>
+                                <option value="-11">UTC-11:00 (American Samoa)</option>
+                                <option value="-10">UTC-10:00 (Hawaii)</option>
+                                <option value="-9">UTC-09:00 (Alaska)</option>
+                                <option value="-8">UTC-08:00 (Pacific)</option>
+                                <option value="-7">UTC-07:00 (Mountain)</option>
+                                <option value="-6">UTC-06:00 (Central)</option>
+                                <option value="-5">UTC-05:00 (Eastern)</option>
+                                <option value="-4">UTC-04:00 (Atlantic)</option>
+                                <option value="-3">UTC-03:00 (Brasilia)</option>
+                                <option value="-2">UTC-02:00 (South Sandwich)</option>
+                                <option value="-1">UTC-01:00 (Azores)</option>
+                                <option value="0">UTC±00:00 (London)</option>
+                                <option value="1">UTC+01:00 (Paris)</option>
+                                <option value="2">UTC+02:00 (Cairo)</option>
+                                <option value="3">UTC+03:00 (Moscow)</option>
+                                <option value="4">UTC+04:00 (Dubai)</option>
+                                <option value="5">UTC+05:00 (Karachi)</option>
+                                <option value="5.5">UTC+05:30 (Mumbai)</option>
+                                <option value="6">UTC+06:00 (Dhaka)</option>
+                                <option value="7">UTC+07:00 (Bangkok)</option>
+                                <option value="8">UTC+08:00 (Singapore)</option>
+                                <option value="9">UTC+09:00 (Tokyo)</option>
+                                <option value="9.5">UTC+09:30 (Adelaide)</option>
+                                <option value="10">UTC+10:00 (Sydney)</option>
+                                <option value="11">UTC+11:00 (Solomon Islands)</option>
+                                <option value="12" selected>UTC+12:00 (Auckland)</option>
+                            </select>
+                        </div>
+                    </div>
                     
-                    <!-- Results -->
+                    <button type="button" id="calculate-time-btn"><i class="fas fa-clock"></i>Calculate Time</button>
+                    
                     <div class="result-container">
-                        <div class="result-label">Overtime Hours</div>
-                        <div class="result-value" id="ot-result">0.0 hours</div>
+                        <div class="result-label">Converted Time</div>
+                        <div class="result-value" id="time-result">--:--</div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -570,27 +805,174 @@
             }
         });
 
-        // Collapsible OT Calculator
-        const otCalcHeader = document.getElementById('ot-calculator-header');
-        const otCalcContent = document.getElementById('ot-calculator-content');
-        const collapseIcon = document.getElementById('collapse-icon');
+        // Tab Switching - Aviation Reference
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show selected tab content
+                const selectedTab = this.getAttribute('data-tab');
+                document.getElementById(selectedTab + '-content').classList.add('active');
+                
+                // Save tab state
+                localStorage.setItem('selectedRefTab', selectedTab);
+            });
+        });
+        
+        // Load saved tab state - Aviation Reference
+        const savedRefTab = localStorage.getItem('selectedRefTab');
+        if (savedRefTab) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const tabToActivate = document.querySelector(`.tab[data-tab="${savedRefTab}"]`);
+            if (tabToActivate) {
+                tabToActivate.classList.add('active');
+                document.getElementById(savedRefTab + '-content').classList.add('active');
+            }
+        }
+
+        // Tab Switching - Calculators
+        document.querySelectorAll('.calc-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.calc-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.calc-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show selected tab content
+                const selectedTab = this.getAttribute('data-tab');
+                document.getElementById(selectedTab + '-content').classList.add('active');
+                
+                // Save tab state
+                localStorage.setItem('selectedCalcTab', selectedTab);
+            });
+        });
+        
+        // Load saved tab state - Calculators
+        const savedCalcTab = localStorage.getItem('selectedCalcTab');
+        if (savedCalcTab) {
+            document.querySelectorAll('.calc-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.calc-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const tabToActivate = document.querySelector(`.calc-tab[data-tab="${savedCalcTab}"]`);
+            if (tabToActivate) {
+                tabToActivate.classList.add('active');
+                document.getElementById(savedCalcTab + '-content').classList.add('active');
+            }
+        }
+
+        // Aviation Reference Section
+        const aviationRefHeader = document.getElementById('aviation-ref-header');
+        const aviationRefContent = document.getElementById('aviation-ref-content');
+        const aviationCollapseIcon = document.getElementById('aviation-collapse-icon');
         
         // Check for saved state
-        if (localStorage.getItem('otCalcOpen') === 'true') {
-            otCalcContent.classList.add('active');
-            collapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+        if (localStorage.getItem('aviationRefOpen') === 'true') {
+            aviationRefContent.classList.add('active');
+            aviationCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
         }
         
-        otCalcHeader.addEventListener('click', function() {
-            otCalcContent.classList.toggle('active');
+        aviationRefHeader.addEventListener('click', function() {
+            aviationRefContent.classList.toggle('active');
             
-            if (otCalcContent.classList.contains('active')) {
-                collapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-                localStorage.setItem('otCalcOpen', 'true');
+            if (aviationRefContent.classList.contains('active')) {
+                aviationCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                localStorage.setItem('aviationRefOpen', 'true');
             } else {
-                collapseIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-                localStorage.setItem('otCalcOpen', 'false');
+                aviationCollapseIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                localStorage.setItem('aviationRefOpen', 'false');
             }
+        });
+
+        // Calculators Section
+        const calculatorsHeader = document.getElementById('calculators-header');
+        const calculatorsContent = document.getElementById('calculators-content');
+        const calculatorsCollapseIcon = document.getElementById('calculators-collapse-icon');
+        
+        // Check for saved state
+        if (localStorage.getItem('calculatorsOpen') === 'true') {
+            calculatorsContent.classList.add('active');
+            calculatorsCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+        }
+        
+        calculatorsHeader.addEventListener('click', function() {
+            calculatorsContent.classList.toggle('active');
+            
+            if (calculatorsContent.classList.contains('active')) {
+                calculatorsCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                localStorage.setItem('calculatorsOpen', 'true');
+            } else {
+                calculatorsCollapseIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                localStorage.setItem('calculatorsOpen', 'false');
+            }
+        });
+        
+        // Time Zone Calculator
+        document.getElementById('calculate-time-btn').addEventListener('click', function() {
+            const fromTimezone = parseFloat(document.getElementById('from-timezone').value);
+            const toTimezone = parseFloat(document.getElementById('to-timezone').value);
+            const hours = parseInt(document.getElementById('time-hours').value);
+            const minutes = parseInt(document.getElementById('time-minutes').value);
+            
+            // Validate inputs
+            if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+                alert('Please enter valid hours (0-23) and minutes (0-59)');
+                return;
+            }
+            
+            // Convert to minutes since midnight UTC
+            let totalMinutesInUTC = (hours * 60 + minutes) - (fromTimezone * 60);
+            
+            // Adjust for day wrapping (keeping within 24 hours)
+            while (totalMinutesInUTC < 0) {
+                totalMinutesInUTC += 24 * 60;
+            }
+            totalMinutesInUTC = totalMinutesInUTC % (24 * 60);
+            
+            // Convert to destination timezone
+            let destinationMinutes = totalMinutesInUTC + (toTimezone * 60);
+            
+            // Adjust for day wrapping again
+            while (destinationMinutes < 0) {
+                destinationMinutes += 24 * 60;
+            }
+            destinationMinutes = destinationMinutes % (24 * 60);
+            
+            // Convert back to hours and minutes
+            const destHours = Math.floor(destinationMinutes / 60);
+            const destMinutes = destinationMinutes % 60;
+            
+            // Format and display
+            const formattedResult = `${destHours.toString().padStart(2, '0')}:${destMinutes.toString().padStart(2, '0')}`;
+            document.getElementById('time-result').textContent = formattedResult;
         });
         
         // OT Calculator Function
