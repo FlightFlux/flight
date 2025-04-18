@@ -20,6 +20,34 @@
             --transition: all 0.2s ease;
         }
 
+        .dark-mode {
+            --text-color: #f1f5f9;
+            --background-color: #0f172a;
+            --card-color: #1e293b;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --primary-light: #1e3a8a;
+        }
+        
+        .dark-mode body {
+            background-image: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        
+        .dark-mode input, .dark-mode select {
+            background-color: #334155;
+            color: white;
+            border-color: #475569;
+        }
+        
+        .dark-mode .card, 
+        .dark-mode .mini-card, 
+        .dark-mode .time-display {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .dark-mode .link-item {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -42,9 +70,11 @@
             margin: 0 auto;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 10px;
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
         }
 
         .logo-text {
@@ -57,6 +87,96 @@
         .logo-icon {
             color: var(--accent-color);
             margin-right: 5px;
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-label {
+            font-size: 0.7rem;
+            margin-right: 5px;
+            color: var(--text-color);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(18px);
+        }
+
+        .time-display {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(0, 99, 198, 0.08);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .time-block.utc {
+            align-items: flex-end;
+        }
+
+        .time-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 2px;
+        }
+
+        .time-value {
+            font-weight: 500;
         }
 
         .mini-card {
@@ -106,8 +226,8 @@
         }
 
         .adv-search-link i {
-            font-size: 0.7rem;
             margin-right: 3px;
+            font-size: 0.7rem;
         }
 
         .adv-search-link:hover {
@@ -124,6 +244,24 @@
             border: 1px solid rgba(0, 99, 198, 0.08);
         }
 
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding-bottom: 8px;
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.active {
+            max-height: 500px;
+        }
+
         h2 {
             font-size: 1.1rem;
             margin-bottom: 12px;
@@ -136,6 +274,47 @@
         h2 i {
             margin-right: 8px;
             color: var(--accent-color);
+        }
+
+        /* OT Calculator Styles */
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 3px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .time-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .time-input-group input {
+            flex: 1;
+        }
+
+        .result-container {
+            background-color: var(--primary-light);
+            padding: 10px;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 0.8rem;
+            margin-bottom: 3px;
+        }
+
+        .result-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
         }
 
         /* Links Grid */
@@ -227,52 +406,45 @@
             font-size: 0.8rem;
         }
 
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --text-color: #f1f5f9;
-                --background-color: #0f172a;
-                --card-color: #1e293b;
-                --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-                --primary-light: #1e3a8a;
-            }
-            
-            body {
-                background-image: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            }
-            
-            input, select {
-                background-color: #334155;
-                color: white;
-                border-color: #475569;
-            }
-            
-            .card, .mini-card {
-                border: 1px solid rgba(255, 255, 255, 0.05);
-            }
-            
-            .link-item {
-                border: 1px solid rgba(255, 255, 255, 0.05);
-            }
-        }
-
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(3px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .mini-card:nth-child(1) { animation: fadeIn 0.15s ease forwards; }
-        .mini-card:nth-child(2) { animation: fadeIn 0.2s ease forwards; }
+        .time-display { animation: fadeIn 0.1s ease forwards; }
+        .mini-card:nth-child(3) { animation: fadeIn 0.15s ease forwards; }
+        .mini-card:nth-child(4) { animation: fadeIn 0.2s ease forwards; }
         .card { animation: fadeIn 0.25s ease forwards; }
         .footer { animation: fadeIn 0.3s ease forwards; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
+        <!-- Header with Dark Mode Toggle -->
+        <div class="header-row">
             <div class="logo-text"><i class="fas fa-plane logo-icon"></i>Airline Staff Portal</div>
+            <div class="dark-mode-toggle">
+                <span class="toggle-label">Dark</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Time Display -->
+        <div class="time-display">
+            <div class="time-block local">
+                <div class="time-label">LOCAL</div>
+                <div class="time-value" id="local-time"></div>
+                <div class="time-value" id="local-date"></div>
+            </div>
+            <div class="time-block utc">
+                <div class="time-label">UTC</div>
+                <div class="time-value" id="utc-time"></div>
+                <div class="time-value" id="utc-date"></div>
+            </div>
         </div>
 
         <!-- Condensed Flight Tracker - Vertical -->
@@ -336,12 +508,168 @@
             </div>
         </div>
 
+        <!-- OT Calculator (Collapsible) -->
+        <div class="card">
+            <div class="collapsible-header" id="ot-calculator-header">
+                <h2><i class="fas fa-calculator"></i>OT Calculator</h2>
+                <i class="fas fa-chevron-down" id="collapse-icon"></i>
+            </div>
+            <div class="collapsible-content" id="ot-calculator-content">
+                <form id="ot-calculator-form">
+                    <!-- Scheduled Times -->
+                    <div class="form-group">
+                        <label>Scheduled Shift (24hr format)</label>
+                        <div class="time-input-group">
+                            <input type="text" id="scheduled-start" placeholder="Start (0800)" maxlength="4" pattern="[0-9]*">
+                            <input type="text" id="scheduled-end" placeholder="End (1630)" maxlength="4" pattern="[0-9]*">
+                        </div>
+                    </div>
+                    
+                    <!-- Actual Times -->
+                    <div class="form-group">
+                        <label>Actual Times Worked (24hr format)</label>
+                        <div class="time-input-group">
+                            <input type="text" id="actual-start" placeholder="Start (0745)" maxlength="4" pattern="[0-9]*">
+                            <input type="text" id="actual-end" placeholder="End (1800)" maxlength="4" pattern="[0-9]*">
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="calculate-ot-btn"><i class="fas fa-calculator"></i>Calculate</button>
+                    
+                    <!-- Results -->
+                    <div class="result-container">
+                        <div class="result-label">Overtime Hours</div>
+                        <div class="result-value" id="ot-result">0.0 hours</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="footer">
             <p>Airline Staff Portal • Mobile Dashboard</p>
         </div>
     </div>
 
     <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        
+        // Check for saved preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.documentElement.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+        }
+        
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        // Collapsible OT Calculator
+        const otCalcHeader = document.getElementById('ot-calculator-header');
+        const otCalcContent = document.getElementById('ot-calculator-content');
+        const collapseIcon = document.getElementById('collapse-icon');
+        
+        // Check for saved state
+        if (localStorage.getItem('otCalcOpen') === 'true') {
+            otCalcContent.classList.add('active');
+            collapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+        }
+        
+        otCalcHeader.addEventListener('click', function() {
+            otCalcContent.classList.toggle('active');
+            
+            if (otCalcContent.classList.contains('active')) {
+                collapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                localStorage.setItem('otCalcOpen', 'true');
+            } else {
+                collapseIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                localStorage.setItem('otCalcOpen', 'false');
+            }
+        });
+        
+        // OT Calculator Function
+        document.getElementById('calculate-ot-btn').addEventListener('click', function() {
+            const scheduledStart = document.getElementById('scheduled-start').value;
+            const scheduledEnd = document.getElementById('scheduled-end').value;
+            const actualStart = document.getElementById('actual-start').value;
+            const actualEnd = document.getElementById('actual-end').value;
+            
+            // Validate inputs
+            if (!scheduledStart || !scheduledEnd || !actualStart || !actualEnd) {
+                alert('Please fill in all time fields');
+                return;
+            }
+            
+            // Convert time format to minutes since midnight
+            function timeToMinutes(timeStr) {
+                if (timeStr.length !== 4) {
+                    alert('Please use 4-digit format (e.g., 0800 for 8:00 AM)');
+                    return null;
+                }
+                
+                const hours = parseInt(timeStr.substring(0, 2));
+                const minutes = parseInt(timeStr.substring(2, 4));
+                
+                if (isNaN(hours) || isNaN(minutes) || hours > 23 || minutes > 59) {
+                    alert('Invalid time format. Use 24-hour format (e.g., 1645 for 4:45 PM)');
+                    return null;
+                }
+                
+                return hours * 60 + minutes;
+            }
+            
+            const schStartMins = timeToMinutes(scheduledStart);
+            const schEndMins = timeToMinutes(scheduledEnd);
+            const actStartMins = timeToMinutes(actualStart);
+            const actEndMins = timeToMinutes(actualEnd);
+            
+            if (schStartMins === null || schEndMins === null || actStartMins === null || actEndMins === null) {
+                return;
+            }
+            
+            // Adjust for overnight shifts
+            let scheduledDuration = schEndMins - schStartMins;
+            if (scheduledDuration < 0) scheduledDuration += 24 * 60; // Add 24 hours in minutes
+            
+            let actualDuration = actEndMins - actStartMins;
+            if (actualDuration < 0) actualDuration += 24 * 60;
+            
+            // Calculate OT (actual - scheduled)
+            const overtimeMinutes = Math.max(0, actualDuration - scheduledDuration);
+            const overtimeHours = overtimeMinutes / 60;
+            
+            // Display result
+            document.getElementById('ot-result').textContent = overtimeHours.toFixed(1) + ' hours';
+        });
+
+        // Update time function
+        function updateTimes() {
+            const now = new Date();
+            
+            // Local time
+            const localTimeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const localDateOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            
+            document.getElementById('local-time').textContent = now.toLocaleTimeString(undefined, localTimeOptions);
+            document.getElementById('local-date').textContent = now.toLocaleDateString(undefined, localDateOptions);
+            
+            // UTC time
+            document.getElementById('utc-time').textContent = now.toUTCString().slice(17, 25); // Extract HH:MM:SS
+            document.getElementById('utc-date').textContent = now.toUTCString().slice(0, 16); // Extract day and date
+        }
+        
+        // Initial update
+        updateTimes();
+        
+        // Update every second
+        setInterval(updateTimes, 1000);
+
         // Flight Tracker Form Handler
         document.getElementById('flight-tracker-form').addEventListener('submit', function(event) {
             event.preventDefault();
