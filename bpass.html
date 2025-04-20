@@ -4,14 +4,17 @@
   <meta charset="UTF-8" />
   <title>Boarding Pass Scanner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="module">
-    import { BrowserMultiFormatReader } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@0.0.10/+esm';
-
-    let codeReader;
-    let scanActive = false;
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  <script>
+    let scanner;
 
     function parseBCBP(data) {
       try {
+        // Check if this is a valid BCBP format (starts with M)
+        if (!data.startsWith('M')) {
+          throw new Error('Not a valid BCBP format');
+        }
+
         // Extract data using standard BCBP format
         const name = data.substring(2, 22).trim();
         const pnr = data.substring(22, 29).trim();
@@ -22,6 +25,8 @@
         const date = data.substring(44, 47).trim();
         const seat = data.substring(48, 52).trim();
         const status = data.substring(58, 59).trim();
+        const boardingClass = data.substring(47, 48).trim();
+        const sequenceNumber = data.substring(107, 111).trim();
 
         // Convert Julian date to calendar date
         const year = new Date().getFullYear();
@@ -39,7 +44,9 @@
           flight, 
           date: formattedDate,
           seat, 
-          status 
+          status,
+          boardingClass,
+          sequenceNumber
         };
       } catch (error) {
         console.error("Error parsing barcode:", error);
@@ -48,65 +55,8 @@
       }
     }
 
-    function toggleScan() {
-      const videoElement = document.getElementById('video');
-      const toggleBtn = document.getElementById('toggle-btn');
-      const statusMsg = document.getElementById('status-msg');
-
-      if (scanActive) {
-        // Stop scanning
-        if (codeReader) {
-          codeReader.reset();
-          codeReader = null;
-        }
-        videoElement.style.display = "none";
-        toggleBtn.textContent = "Start Scan";
-        statusMsg.textContent = "Scanner stopped";
-        scanActive = false;
-      } else {
-        // Start scanning
-        startScan();
-        toggleBtn.textContent = "Stop Scan";
-        scanActive = true;
-      }
-    }
-
-    async function startScan() {
-      const videoElement = document.getElementById('video');
-      const statusMsg = document.getElementById('status-msg');
-      
-      statusMsg.textContent = 'Activating camera...';
-      videoElement.style.display = "block";
-      
-      codeReader = new BrowserMultiFormatReader();
-
-      try {
-        // In the older version, we directly use decodeFromVideoDevice with a null deviceId
-        // to use the default camera
-        await codeReader.decodeFromVideoDevice(null, videoElement, (result, err) => {
-          if (result) {
-            handleScanResult(result);
-          } else if (err && err.name !== 'NotFoundException') {
-            console.error(err);
-            statusMsg.textContent = 'Error reading barcode';
-          }
-        });
-        
-        statusMsg.textContent = 'Camera ready. Point at barcode...';
-        
-        // Hide camera selection for now since we're using the default camera
-        document.getElementById('camera-select').style.display = 'none';
-      } catch (err) {
-        console.error(err);
-        statusMsg.textContent = 'Error accessing camera';
-        document.getElementById('toggle-btn').textContent = "Start Scan";
-        scanActive = false;
-      }
-    }
-
-    function handleScanResult(result) {
-      const barcodeData = result.text;
-      document.getElementById('raw').textContent = barcodeData;
+    function onScanSuccess(decodedText, decodedResult) {
+      console.log(`Code matched = ${decodedText}`, decodedResult);
       
       // Play success sound
       document.getElementById('success-sound').play().catch(e => console.log('Sound play prevented by browser'));
@@ -116,8 +66,12 @@
         navigator.vibrate(200);
       }
       
-      if (barcodeData.length > 20) {  // Basic validation check
-        const parsed = parseBCBP(barcodeData);
+      // Display raw data
+      document.getElementById('raw').textContent = decodedText;
+      
+      // Parse and display boarding pass data
+      if (decodedText.length > 20) {
+        const parsed = parseBCBP(decodedText);
         if (parsed) {
           fillBoardingPassInfo(parsed);
           document.getElementById('status-msg').textContent = 'Scan complete!';
@@ -129,6 +83,82 @@
       } else {
         document.getElementById('status-msg').textContent = 'Invalid barcode format';
       }
+      
+      // Stop scanning after successful scan
+      scanner.stop().then(() => {
+        document.getElementById('toggle-btn').textContent = "Start Scan";
+        document.getElementById('status-msg').textContent = 'Scan complete!';
+        document.getElementById('scanner-container').style.display = 'none';
+      }).catch(err => console.error(err));
+    }
+
+    function onScanFailure(error) {
+      // Handle scan failure, usually better to ignore and keep scanning
+      // console.warn(`Code scan error = ${error}`);
+    }
+
+    async function toggleScan() {
+      const toggleBtn = document.getElementById('toggle-btn');
+      const statusMsg = document.getElementById('status-msg');
+      const scannerContainer = document.getElementById('scanner-container');
+
+      if (scanner && scanner.isScanning) {
+        // Stop scanning
+        scanner.stop().then(() => {
+          toggleBtn.textContent = "Start Scan";
+          statusMsg.textContent = "Scanner stopped";
+          scannerContainer.style.display = 'none';
+        }).catch(err => console.error(err));
+      } else {
+        // Start scanning
+        startScan();
+      }
+    }
+
+    async function startScan() {
+      const toggleBtn = document.getElementById('toggle-btn');
+      const statusMsg = document.getElementById('status-msg');
+      const scannerContainer = document.getElementById('scanner-container');
+      
+      statusMsg.textContent = 'Activating camera...';
+      scannerContainer.style.display = 'block';
+      
+      const config = {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+        aspectRatio: 1.333,
+        formatsToSupport: [ Html5QrcodeSupportedFormats.PDF_417 ]
+      };
+      
+      scanner = new Html5Qrcode("scanner");
+      
+      // Try back camera first, fallback to front camera if needed
+      try {
+        await scanner.start(
+          { facingMode: "environment" },
+          config,
+          onScanSuccess,
+          onScanFailure
+        );
+        toggleBtn.textContent = "Stop Scan";
+        statusMsg.textContent = 'Camera ready. Point at boarding pass barcode...';
+      } catch (err) {
+        console.log('Back camera not available, trying front camera');
+        try {
+          await scanner.start(
+            { facingMode: "user" },
+            config,
+            onScanSuccess,
+            onScanFailure
+          );
+          toggleBtn.textContent = "Stop Scan";
+          statusMsg.textContent = 'Camera ready. Point at boarding pass barcode...';
+        } catch (err) {
+          console.error('Unable to start scanning:', err);
+          statusMsg.textContent = 'Error accessing camera';
+          scannerContainer.style.display = 'none';
+        }
+      }
     }
 
     function fillBoardingPassInfo(data) {
@@ -139,6 +169,8 @@
       document.getElementById('date').textContent = data.date;
       document.getElementById('seat').textContent = data.seat;
       document.getElementById('status').textContent = data.status === '1' ? 'Checked-in' : 'Not Checked-in';
+      document.getElementById('boarding-class').textContent = data.boardingClass || '—';
+      document.getElementById('sequence').textContent = data.sequenceNumber || '—';
       
       document.getElementById('results-section').style.display = 'block';
       document.getElementById('info-card').classList.add('highlight');
@@ -323,20 +355,20 @@
       margin-top: 8px;
     }
     
-    #video {
+    #scanner-container {
       width: 100%;
-      border-radius: var(--border-radius);
-      border: 2px solid var(--primary-color);
       margin-top: 12px;
       display: none;
       background: #000;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      position: relative;
     }
     
-    #camera-select {
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      display: none;
+    #scanner {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
     }
     
     #results-section {
@@ -371,7 +403,7 @@
       font-weight: 600;
       font-size: 14px;
       color: var(--light-text);
-      min-width: 70px;
+      min-width: 120px;
     }
     
     .info-value {
@@ -508,11 +540,12 @@
   <div class="scan-container">
     <div class="camera-controls">
       <button id="toggle-btn" onclick="toggleScan()">Start Scan</button>
-      <select id="camera-select" aria-label="Select camera"></select>
     </div>
     
     <div id="status-msg">Tap "Start Scan" to begin</div>
-    <video id="video" autoplay muted playsinline></video>
+    <div id="scanner-container">
+      <div id="scanner"></div>
+    </div>
   </div>
   
   <div id="results-section">
@@ -542,6 +575,14 @@
         <div id="seat" class="info-value">—</div>
       </div>
       <div class="info-row">
+        <div class="info-label">Class:</div>
+        <div id="boarding-class" class="info-value">—</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Sequence:</div>
+        <div id="sequence" class="info-value">—</div>
+      </div>
+      <div class="info-row">
         <div class="info-label">Status:</div>
         <div id="status" class="info-value">—</div>
       </div>
@@ -568,7 +609,7 @@
   <audio id="success-sound" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQwAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAASAAAeMwAUFBQUFBQUFBQUFBQUFBQUFBQUFCkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj5TU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGh3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXrq6urq6urq6urq6urq6urq6urq6urq6urq6urq6urq6u//tQxAADwAABpAAAACAAADSAAAAETEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" preload="auto"></audio>
   
   <div class="footer">
-    Scan your boarding pass barcode to extract information. Works with standard BCBP format.
+    Scan boarding pass PDF417 barcodes to extract BCBP information.
   </div>
 </body>
 </html>
