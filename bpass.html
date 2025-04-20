@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Boarding Pass Scanner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module">
+    import { BrowserMultiFormatReader } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@0.0.10/+esm';
+
+    let codeReader;
+
+    function parseBCBP(data) {
+      const name = data.substring(2, 22).trim();
+      const pnr = data.substring(22, 29).trim();
+      const from = data.substring(30, 33).trim();
+      const to = data.substring(33, 36).trim();
+      const airline = data.substring(36, 39).trim();
+      const flight = data.substring(39, 43).trim();
+      const julian = data.substring(44, 47).trim();
+      const seat = data.substring(48, 52).trim();
+      const status = data.substring(58, 59).trim();
+      return { name, pnr, from, to, airline, flight, julian, seat, status };
+    }
+
+    async function startScan() {
+      document.getElementById('start-btn').disabled = true;
+      document.getElementById('status-msg').textContent = 'Activating camera...';
+      const videoElement = document.getElementById('video');
+      codeReader = new BrowserMultiFormatReader();
+
+      try {
+        const devices = await codeReader.listVideoInputDevices();
+        const selectedDeviceId = devices[0].deviceId;
+
+        await codeReader.decodeFromVideoDevice(selectedDeviceId, videoElement, (result, err) => {
+          if (result) {
+            document.getElementById('status-msg').textContent = 'Scan complete!';
+            document.getElementById('raw').textContent = result.text;
+
+            const parsed = parseBCBP(result.text);
+            document.getElementById('name').textContent = parsed.name;
+            document.getElementById('pnr').textContent = parsed.pnr;
+            document.getElementById('flight').textContent = `${parsed.airline} ${parsed.flight}`;
+            document.getElementById('route').textContent = `${parsed.from} → ${parsed.to}`;
+            document.getElementById('seat').textContent = parsed.seat;
+            document.getElementById('status').textContent = parsed.status === '1' ? 'Checked-in' : 'Not Checked-in';
+
+            codeReader.reset();
+            videoElement.style.display = "none";
+          } else if (err && !(err instanceof ZXing.NotFoundException)) {
+            document.getElementById('status-msg').textContent = 'Error reading barcode.';
+          }
+        });
+      } catch (err) {
+        console.error(err);
+        document.getElementById('status-msg').textContent = 'Error accessing camera.';
+      }
+    }
+
+    window.startScan = startScan;
+  </script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    #video {
+      width: 100%;
+      max-width: 400px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      margin: 15px auto;
+      display: none;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .section {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .info {
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .label {
+      font-weight: 600;
+    }
+
+    #status-msg {
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    #raw {
+      font-size: 13px;
+      word-wrap: break-word;
+      color: #888;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🛫 Boarding Pass Scanner</h2>
+
+  <button id="start-btn" class="btn" onclick="startScan()">Start Scan</button>
+  <div id="status-msg">Click "Start Scan" to begin</div>
+
+  <video id="video" autoplay muted playsinline></video>
+
+  <div class="section">
+    <div class="info"><span class="label">Name:</span> <span id="name">—</span></div>
+    <div class="info"><span class="label">PNR:</span> <span id="pnr">—</span></div>
+    <div class="info"><span class="label">Flight:</span> <span id="flight">—</span></div>
+    <div class="info"><span class="label">Route:</span> <span id="route">—</span></div>
+    <div class="info"><span class="label">Seat:</span> <span id="seat">—</span></div>
+    <div class="info"><span class="label">Status:</span> <span id="status">—</span></div>
+  </div>
+
+  <div class="section">
+    <div class="label">Raw Barcode:</div>
+    <div id="raw">—</div>
+  </div>
+</body>
+</html>
