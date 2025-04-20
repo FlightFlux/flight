@@ -5,7 +5,7 @@
   <title>Boarding Pass Scanner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module">
-    import { BrowserMultiFormatReader } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.1/+esm';
+    import { BrowserMultiFormatReader } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@0.0.10/+esm';
 
     let codeReader;
     let scanActive = false;
@@ -81,38 +81,21 @@
       codeReader = new BrowserMultiFormatReader();
 
       try {
-        const devices = await codeReader.listVideoInputDevices();
+        // In the older version, we directly use decodeFromVideoDevice with a null deviceId
+        // to use the default camera
+        await codeReader.decodeFromVideoDevice(null, videoElement, (result, err) => {
+          if (result) {
+            handleScanResult(result);
+          } else if (err && err.name !== 'NotFoundException') {
+            console.error(err);
+            statusMsg.textContent = 'Error reading barcode';
+          }
+        });
         
-        if (devices.length === 0) {
-          statusMsg.textContent = 'No camera detected';
-          return;
-        }
-
-        // Create camera selection if there are multiple cameras
-        if (devices.length > 1) {
-          const cameraSelect = document.getElementById('camera-select');
-          cameraSelect.innerHTML = '';
-          cameraSelect.style.display = 'block';
-          
-          devices.forEach((device, index) => {
-            const option = document.createElement('option');
-            option.value = device.deviceId;
-            option.text = device.label || `Camera ${index + 1}`;
-            cameraSelect.appendChild(option);
-          });
-          
-          cameraSelect.onchange = () => {
-            if (codeReader) {
-              codeReader.reset();
-              startScanWithCamera(cameraSelect.value);
-            }
-          };
-          
-          startScanWithCamera(devices[0].deviceId);
-        } else {
-          document.getElementById('camera-select').style.display = 'none';
-          startScanWithCamera(devices[0].deviceId);
-        }
+        statusMsg.textContent = 'Camera ready. Point at barcode...';
+        
+        // Hide camera selection for now since we're using the default camera
+        document.getElementById('camera-select').style.display = 'none';
       } catch (err) {
         console.error(err);
         statusMsg.textContent = 'Error accessing camera';
@@ -121,46 +104,30 @@
       }
     }
 
-    async function startScanWithCamera(deviceId) {
-      const videoElement = document.getElementById('video');
-      const statusMsg = document.getElementById('status-msg');
+    function handleScanResult(result) {
+      const barcodeData = result.text;
+      document.getElementById('raw').textContent = barcodeData;
       
-      try {
-        await codeReader.decodeFromVideoDevice(deviceId, videoElement, (result, err) => {
-          if (result) {
-            const barcodeData = result.text;
-            document.getElementById('raw').textContent = barcodeData;
-            
-            // Play success sound
-            document.getElementById('success-sound').play().catch(e => console.log('Sound play prevented by browser'));
-            
-            // Vibrate on mobile devices
-            if (navigator.vibrate) {
-              navigator.vibrate(200);
-            }
-            
-            if (barcodeData.length > 20) {  // Basic validation check
-              const parsed = parseBCBP(barcodeData);
-              if (parsed) {
-                fillBoardingPassInfo(parsed);
-                statusMsg.textContent = 'Scan complete!';
-                
-                // Save to history
-                saveToHistory(parsed);
-                updateHistoryDisplay();
-              }
-            } else {
-              statusMsg.textContent = 'Invalid barcode format';
-            }
-          } else if (err && !(err instanceof ZXing.NotFoundException)) {
-            statusMsg.textContent = 'Error reading barcode';
-          }
-        });
-        
-        statusMsg.textContent = 'Camera ready. Point at barcode...';
-      } catch (err) {
-        console.error(err);
-        statusMsg.textContent = 'Failed to start camera';
+      // Play success sound
+      document.getElementById('success-sound').play().catch(e => console.log('Sound play prevented by browser'));
+      
+      // Vibrate on mobile devices
+      if (navigator.vibrate) {
+        navigator.vibrate(200);
+      }
+      
+      if (barcodeData.length > 20) {  // Basic validation check
+        const parsed = parseBCBP(barcodeData);
+        if (parsed) {
+          fillBoardingPassInfo(parsed);
+          document.getElementById('status-msg').textContent = 'Scan complete!';
+          
+          // Save to history
+          saveToHistory(parsed);
+          updateHistoryDisplay();
+        }
+      } else {
+        document.getElementById('status-msg').textContent = 'Invalid barcode format';
       }
     }
 
@@ -191,6 +158,7 @@
       // Check if already exists by PNR and flight
       const exists = history.some(item => 
         item.pnr === data.pnr && 
+        item.airline === data.airline && 
         item.flight === data.flight
       );
       
