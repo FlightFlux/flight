@@ -1,0 +1,25 @@
+!DOCTYPE html
+html lang=en
+head
+  meta charset=UTF-8 
+  meta name=viewport content=width=device-width, initial-scale=1.0 
+  titleMy PWA Notification Apptitle
+  link rel=manifest href=manifest.json 
+  script
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() = console.log('Service Worker Registered'));
+    }
+
+    Notification.requestPermission().then(permission = {
+      if (permission === granted) {
+        new Notification(Welcome to the App!);
+      }
+    });
+  script
+head
+body
+  h1Hello PWA with Notificationsh1
+  pInstall this app on your phone and try enabling notifications!p
+body
+html
