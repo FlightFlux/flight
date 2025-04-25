@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standardized Delay Report Generator</title>
+    <style>
+        :root {
+            --primary-color: #0054a6;
+            --primary-light: #e7f1fd;
+            --border-color: #ddd;
+            --text-color: #333;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            width: 24px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px 15px -10px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            padding: 0 10px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group.small {
+            flex: 0 0 150px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .required:after {
+            content: '*';
+            color: var(--error-color);
+            margin-left: 3px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon input {
+            padding-right: 35px;
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        
+        .time-input {
+            width: 100px;
+        }
+        
+        .help-text {
+            display: block;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .entry-list {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .entry-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .entry-item:last-child {
+            border-bottom: none;
+        }
+        
+        .entry-item .time {
+            font-weight: bold;
+            width: 60px;
+            margin-right: 10px;
+        }
+        
+        .entry-item .marker {
+            width: 60px;
+            color: #6c757d;
+            margin-right: 10px;
+        }
+        
+        .entry-item .text {
+            flex: 1;
+        }
+        
+        .entry-item .actions {
+            margin-left: 10px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: #003d77;
+        }
+        
+        .btn i {
+            margin-right: 5px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #1e7e34;
+        }
+        
+        .btn-danger {
+            background-color: var(--error-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .time-entry-form {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .time-entry-form .form-group {
+            margin-bottom: 0;
+        }
+        
+        .template-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+        
+        .modal-close {
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .print-hidden {
+            display: block;
+        }
+        
+        /* Toggle switch styles */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--success-color);
+        }
+        
+        input:focus + .toggle-slider {
+            box-shadow: 0 0 1px var(--success-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .toggle-label {
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .form-group {
+                flex: 0 0 100%;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-actions .btn {
+                width: 100%;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+            
+            .print-hidden {
+                display: none !important;
+            }
+            
+            .header {
+                background-color: white;
+                color: black;
+                border-bottom: 2px solid black;
+            }
+            
+            input, select, textarea {
+                border: none;
+                padding: 0;
+            }
+            
+            .entry-list {
+                border: none;
+                max-height: none;
+            }
+            
+            .form-actions {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-plane"></i> Standardized Delay Report</h1>
+        </div>
+        
+        <div class="content">
+            <form id="delayReportForm">
+                <!-- Flight Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-info-circle"></i> Flight Information</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="flightNumber" class="required">Flight Number</label>
+                            <input type="text" id="flightNumber" name="flightNumber" placeholder="e.g., AA1234" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="flightDate" class="required">Date</label>
+                            <input type="date" id="flightDate" name="flightDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="origin">Origin</label>
+                            <input type="text" id="origin" name="origin" placeholder="e.g., DFW" value="DFW">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="destination">Destination</label>
+                            <input type="text" id="destination" name="destination" placeholder="e.g., JFK">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="aircraft">Aircraft Type</label>
+                            <select id="aircraft" name="aircraft">
+                                <option value="">Select aircraft type</option>
+                                <option value="B777">B777</option>
+                                <option value="B787">B787</option>
+                                <option value="B737">B737</option>
+                                <option value="A319">A319</option>
+                                <option value="A320">A320</option>
+                                <option value="A321">A321</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="shipNumber">Ship Number</label>
+                            <input type="text" id="shipNumber" name="shipNumber" placeholder="e.g., N123AA">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="terminal">Terminal</label>
+                            <select id="terminal" name="terminal">
+                                <option value="">Select terminal</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gateNumber">Gate Number</label>
+                            <input type="text" id="gateNumber" name="gateNumber" placeholder="e.g., 12">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Delay Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-exclamation-triangle"></i> Delay Information</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group small">
+                            <label for="std" class="required">STD</label>
+                            <input type="time" id="std" name="std" required>
+                            <span class="help-text">Scheduled Time of Departure</span>
+                        </div>
+                        
+                        <div class="form-group small">
+                            <label for="atd" class="required">ATD</label>
+                            <input type="time" id="atd" name="atd" required>
+                            <span class="help-text">Actual Time of Departure</span>
+                        </div>
+                        
+                        <div class="form-group small">
+                            <label for="delayDuration">Delay Duration</label>
+                            <div class="input-with-icon">
+                                <input type="number" id="delayDuration" name="delayDuration" min="0" placeholder="Minutes">
+                                <div class="input-icon">min</div>
+                            </div>
+                            <span class="help-text">Auto-calculated, can edit</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="delayCode">Delay Code</label>
+                            <select id="delayCode" name="delayCode">
+                                <option value="">Select delay code</option>
+                                <option value="CG1">CG1 - Cargo Loading</option>
+                                <option value="CG2">CG2 - Cargo Documentation</option>
+                                <option value="CG3">CG3 - ULD Availability</option>
+                                <option value="CG4">CG4 - Cargo Weight Discrepancy</option>
+                                <option value="GM1">GM1 - Ground Movement</option>
+                                <option value="GM2">GM2 - Towing</option>
+                                <option value="GM3">GM3 - Pushback Equipment</option>
+                                <option value="GD1">GD1 - Ground Delay</option>
+                                <option value="GD2">GD2 - Gate Availability</option>
+                                <option value="EQ1">EQ1 - Equipment Malfunction</option>
+                                <option value="WO1">WO1 - Weight & Balance</option>
+                                <option value="MC1">MC1 - Maintenance</option>
+                                <option value="WX1">WX1 - Weather</option>
+                                <option value="OA1">OA1 - Other Airline</option>
+                                <option value="ATC">ATC - Air Traffic Control</option>
+                                <option value="SF1">SF1 - Staffing</option>
+                                <option value="SF2">SF2 - Crew Availability</option>
+                                <option value="OTH">OTH - Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="delayInfo">Delay Description</label>
+                            <input type="text" id="delayInfo" name="delayInfo" placeholder="e.g., 3-minute delay due to late cargo">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="actionToggle">Action</label>
+                            <div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="actionToggle" name="actionToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span class="toggle-label" id="actionStatus">Off</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Personnel Section -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-users"></i> Key Personnel</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="csm" class="required">CSM</label>
+                            <input type="text" id="csm" name="csm" placeholder="e.g., June Tran" required>
+                            <span class="help-text">Customer Service Manager</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="allocator">Allocator</label>
+                            <input type="text" id="allocator" name="allocator" placeholder="e.g., Ve Flewellen">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="crewChief" class="required">Crew Chief</label>
+                            <input type="text" id="crewChief" name="crewChief" placeholder="e.g., D21PM - Randell Gaskin" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mod">MOD</label>
+                            <input type="text" id="mod" name="mod" placeholder="e.g., John Smith">
+                            <span class="help-text">Manager On Duty</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Section -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-clock"></i> Delay Timeline</h2>
+                    
+                    <div class="template-buttons print-hidden">
+                        <button type="button" class="btn btn-outline btn-sm" id="loadCargoTemplate">
+                            <i class="fas fa-luggage-cart"></i> Cargo Template
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" id="loadPassengerTemplate">
+                            <i class="fas fa-users"></i> Passenger Template
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" id="loadFullTemplate">
+                            <i class="fas fa-clipboard-list"></i> Full Template
+                        </button>
+                    </div>
+                    
+                    <div class="entry-list" id="timelineEntries">
+                        <!-- Timeline entries will be added here -->
+                    </div>
+                    
+                    <div class="time-entry-form print-hidden">
+                        <div class="form-group small">
+                            <label for="timeInput">Time</label>
+                            <input type="time" id="timeInput">
+                        </div>
+                        
+                        <div class="form-group small">
+                            <label for="markerInput">Marker</label>
+                            <input type="text" id="markerInput" placeholder="e.g., D-90">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventInput">Event Description</label>
+                            <input type="text" id="eventInput" placeholder="e.g., Trip sheet released">
+                        </div>
+                        
+                        <button type="button" class="btn btn-success" id="addTimeEntry">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                    
+                    <div class="form-row print-hidden">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-outline btn-sm" id="calculateMarkers">
+                                <i class="fas fa-calculator"></i> Calculate Markers
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" id="sortTimeline">
+                                <i class="fas fa-sort"></i> Sort by Time
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contributing Factors Section -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-list-ul"></i> Contributing Factors</h2>
+                    
+                    <div class="entry-list" id="factorEntries">
+                        <!-- Factor entries will be added here -->
+                    </div>
+                    
+                    <div class="time-entry-form print-hidden">
+                        <div class="form-group">
+                            <label for="factorInput">Contributing Factor</label>
+                            <input type="text" id="factorInput" placeholder="Enter contributing factor">
+                        </div>
+                        
+                        <button type="button" class="btn btn-success" id="addFactorEntry">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Corrective Actions Section -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-check-square"></i> Actions & Notes</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="correctiveActions">Corrective Actions Taken</label>
+                            <textarea id="correctiveActions" name="correctiveActions" rows="3" placeholder="Describe actions taken to mitigate the delay..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="recommendations">Recommendations</label>
+                            <textarea id="recommendations" name="recommendations" rows="3" placeholder="List recommendations to prevent similar delays in the future..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="allocatorNotes">Allocator Task Notes</label>
+                            <textarea id="allocatorNotes" name="allocatorNotes" rows="3" placeholder="Notes about allocator task assignments..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="form-actions print-hidden">
+                    <div>
+                        <button type="button" class="btn btn-outline" id="resetForm">
+                            <i class="fas fa-trash-alt"></i> Reset Form
+                        </button>
+                        <button type="button" class="btn btn-outline" id="saveTemplate">
+                            <i class="fas fa-save"></i> Save Template
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <button type="button" class="btn" id="printReport">
+                            <i class="fas fa-print"></i> Print Report
+                        </button>
+                        <button type="button" class="btn btn-success" id="generatePDF">
+                            <i class="fas fa-file-pdf"></i> Generate PDF
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Report Preview Modal -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Report Preview</h2>
+                <span class="modal-close" id="closePreviewModal">&times;</span>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Report preview will be generated here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date as default
+            const today = new Date();
+            document.getElementById('flightDate').valueAsDate = today;
+            
+            // Event listeners for form actions
+            document.getElementById('resetForm').addEventListener('click', confirmResetForm);
+            document.getElementById('printReport').addEventListener('click', printReport);
+            document.getElementById('generatePDF').addEventListener('click', showPreview);
+            document.getElementById('saveTemplate').addEventListener('click', saveTemplate);
+            document.getElementById('closePreviewModal').addEventListener('click', closePreview);
+            
+            // Time entries
+            document.getElementById('addTimeEntry').addEventListener('click', addTimeEntry);
+            document.getElementById('loadCargoTemplate').addEventListener('click', loadCargoTemplate);
+            document.getElementById('loadPassengerTemplate').addEventListener('click', loadPassengerTemplate);
+            document.getElementById('loadFullTemplate').addEventListener('click', loadFullTemplate);
+            document.getElementById('calculateMarkers').addEventListener('click', calculateMarkers);
+            document.getElementById('sortTimeline').addEventListener('click', sortTimeline);
+            
+            // Factor entries
+            document.getElementById('addFactorEntry').addEventListener('click', addFactorEntry);
+            
+            // Delay calculation
+            document.getElementById('std').addEventListener('change', calculateDelay);
+            document.getElementById('atd').addEventListener('change', calculateDelay);
+            
+            // Auto-generate delay description
+            document.getElementById('delayDuration').addEventListener('input', updateDelayInfo);
+            document.getElementById('delayCode').addEventListener('change', updateDelayInfo);
+            
+            // Action toggle switch
+            document.getElementById('actionToggle').addEventListener('change', updateActionStatus);
+        });
+        
+        // Update action status display
+        function updateActionStatus() {
+            const toggle = document.getElementById('actionToggle');
+            const status = document.getElementById('actionStatus');
+            
+            if (toggle.checked) {
+                status.textContent = 'On';
+                status.style.color = 'var(--success-color)';
+            } else {
+                status.textContent = 'Off';
+                status.style.color = 'inherit';
+            }
+        }
+        
+        // Timeline entry management
+        function addTimeEntry() {
+            const timeInput = document.getElementById('timeInput');
+            const time = timeInput.value ? formatTime(timeInput.value) : '';
+            const marker = document.getElementById('markerInput').value.trim();
+            const event = document.getElementById('eventInput').value.trim();
+            
+            if (!time || !event) {
+                alert('Please enter at least a time and event description.');
+                return;
+            }
+            
+            const entriesList = document.getElementById('timelineEntries');
+            const entryItem = document.createElement('div');
+            entryItem.className = 'entry-item';
+            entryItem.innerHTML = `
+                <div class="time">${time}</div>
+                <div class="marker">${marker}</div>
+                <div class="text">${event}</div>
+                <div class="actions print-hidden">
+                    <button type="button" class="btn btn-danger btn-sm remove-entry">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            entriesList.appendChild(entryItem);
+            
+            // Add event listener to remove button
+            entryItem.querySelector('.remove-entry').addEventListener('click', function() {
+                entriesList.removeChild(entryItem);
+            });
+            
+            // Clear input fields
+            document.getElementById('timeInput').value = '';
+            document.getElementById('markerInput').value = '';
+            document.getElementById('eventInput').value = '';
+            
+            // Focus on time input for next entry
+            document.getElementById('timeInput').focus();
+        }
+        
+        // Format time from input type="time" to HH:MM format
+        function formatTime(timeValue) {
+            if (!timeValue) return '';
+            
+            try {
+                const [hours, minutes] = timeValue.split(':');
+                return `${hours}:${minutes}`;
+            } catch (e) {
+                return timeValue;
+            }
+        }
+        
+        // Contributing factor management
+        function addFactorEntry() {
+            const factor = document.getElementById('factorInput').value.trim();
+            
+            if (!factor) {
+                alert('Please enter a contributing factor.');
+                return;
+            }
+            
+            const entriesList = document.getElementById('factorEntries');
+            const entryItem = document.createElement('div');
+            entryItem.className = 'entry-item';
+            entryItem.innerHTML = `
+                <div class="text">${factor}</div>
+                <div class="actions print-hidden">
+                    <button type="button" class="btn btn-danger btn-sm remove-entry">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            entriesList.appendChild(entryItem);
+            
+            // Add event listener to remove button
+            entryItem.querySelector('.remove-entry').addEventListener('click', function() {
+                entriesList.removeChild(entryItem);
+            });
+            
+            // Clear input field
+            document.getElementById('factorInput').value = '';
+            
+            // Focus on factor input for next entry
+            document.getElementById('factorInput').focus();
+        }
+        
+        // Calculate delay duration based on STD and ATD
+        function calculateDelay() {
+            const stdInput = document.getElementById('std').value;
+            const atdInput = document.getElementById('atd').value;
+            
+            if (!stdInput || !atdInput) return;
+            
+            // Parse times to minutes since midnight
+            const [stdHours, stdMinutes] = stdInput.split(':').map(Number);
+            const [atdHours, atdMinutes] = atdInput.split(':').map(Number);
+            
+            const stdTotalMinutes = stdHours * 60 + stdMinutes;
+            const atdTotalMinutes = atdHours * 60 + atdMinutes;
+            
+            // Calculate delay (handle overnight)
+            let delayMinutes;
+            if (atdTotalMinutes < stdTotalMinutes) {
+                delayMinutes = (atdTotalMinutes + 24 * 60) - stdTotalMinutes;
+            } else {
+                delayMinutes = atdTotalMinutes - stdTotalMinutes;
+            }
+            
+            document.getElementById('delayDuration').value = delayMinutes;
+            
+            // Update delay info
+            updateDelayInfo();
+        }
+        
+        // Update delay info based on duration and code
+        function updateDelayInfo() {
+            const delayDuration = document.getElementById('delayDuration').value;
+            const delayCode = document.getElementById('delayCode').value;
+            const delayInfoInput = document.getElementById('delayInfo');
+            
+            if (delayDuration && delayCode && !delayInfoInput.value) {
+                delayInfoInput.value = `${delayDuration}-minute delay ${delayCode}`;
+            }
+        }
+        
+        // Reset form with confirmation
+        function confirmResetForm() {
+            if (confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+                document.getElementById('delayReportForm').reset();
+                document.getElementById('timelineEntries').innerHTML = '';
+                document.getElementById('factorEntries').innerHTML = '';
+                
+                // Reset date to today
+                const today = new Date();
+                document.getElementById('flightDate').valueAsDate = today;
+                
+                // Reset action toggle state
+                updateActionStatus();
+            }
+        }
+        
+        // Print report
+        function printReport() {
+            window.print();
+        }
+        
+        // Show preview (same as what would be generated for PDF)
+        function showPreview() {
+            const previewContent = document.getElementById('previewContent');
+            previewContent.innerHTML = generateReportHTML();
+            
+            document.getElementById('previewModal').classList.add('active');
+        }
+        
+        // Close preview modal
+        function closePreview() {
+            document.getElementById('previewModal').classList.remove('active');
+        }
+        
+        // Save template
+        function saveTemplate() {
+            const templateName = prompt('Enter a name for this template:');
+            if (!templateName) return;
+            
+            const template = {
+                flightNumber: document.getElementById('flightNumber').value,
+                origin: document.getElementById('origin').value,
+                destination: document.getElementById('destination').value,
+                aircraft: document.getElementById('aircraft').value,
+                shipNumber: document.getElementById('shipNumber').value,
+                terminal: document.getElementById('terminal').value,
+                gateNumber: document.getElementById('gateNumber').value,
+                std: document.getElementById('std').value,
+                atd: document.getElementById('atd').value,
+                delayDuration: document.getElementById('delayDuration').value,
+                delayCode: document.getElementById('delayCode').value,
+                delayInfo: document.getElementById('delayInfo').value,
+                actionToggle: document.getElementById('actionToggle').checked,
+                csm: document.getElementById('csm').value,
+                allocator: document.getElementById('allocator').value,
+                crewChief: document.getElementById('crewChief').value,
+                mod: document.getElementById('mod').value,
+                correctiveActions: document.getElementById('correctiveActions').value,
+                recommendations: document.getElementById('recommendations').value,
+                allocatorNotes: document.getElementById('allocatorNotes').value,
+                timeline: getTimelineEntries(),
+                factors: getFactorEntries()
+            };
+            
+            // Store in localStorage
+            const templates = JSON.parse(localStorage.getItem('delayTemplates') || '{}');
+            templates[templateName] = template;
+            localStorage.setItem('delayTemplates', JSON.stringify(templates));
+            
+            alert(`Template "${templateName}" saved successfully.`);
+        }
+        
+        // Get timeline entries
+        function getTimelineEntries() {
+            const entries = [];
+            document.querySelectorAll('#timelineEntries .entry-item').forEach(item => {
+                entries.push({
+                    time: item.querySelector('.time').textContent,
+                    marker: item.querySelector('.marker').textContent,
+                    text: item.querySelector('.text').textContent
+                });
+            });
+            return entries;
+        }
+        
+        // Get factor entries
+        function getFactorEntries() {
+            const entries = [];
+            document.querySelectorAll('#factorEntries .entry-item').forEach(item => {
+                entries.push(item.querySelector('.text').textContent);
+            });
+            return entries;
+        }
+        
+        // Load cargo timeline template
+        function loadCargoTemplate() {
+            // Clear existing entries
+            document.getElementById('timelineEntries').innerHTML = '';
+            
+            // Common cargo timeline
+            const cargoEvents = [
+                { time: "20:30", marker: "D-90", text: "Trip sheet released" },
+                { time: "20:35", marker: "D-85", text: "Crew Chief pulled trip sheet" },
+                { time: "20:44", marker: "D-76", text: "Crew showed up at the gate" },
+                { time: "20:53", marker: "D-67", text: "First ULD loaded FWD" },
+                { time: "20:56", marker: "D-64", text: "First ULD loaded AFT" },
+                { time: "21:20", marker: "D-40", text: "Bulk cargo loading started" },
+                { time: "21:36", marker: "D-24", text: "Last ULD loaded FWD" },
+                { time: "21:40", marker: "D-20", text: "FWD cargo door closed" },
+                { time: "21:53", marker: "D-7", text: "Last ULD loaded AFT" },
+                { time: "21:58", marker: "D-2", text: "Bulk door closed" },
+                { time: "22:00", marker: "D-0", text: "AFT cargo door closed" },
+                { time: "22:03", marker: "D+3", text: "Aircraft pushed back" }
+            ];
+            
+            addTemplateEntries(cargoEvents);
+        }
+        
+        // Load passenger timeline template
+        function loadPassengerTemplate() {
+            // Clear existing entries
+            document.getElementById('timelineEntries').innerHTML = '';
+            
+            // Common passenger boarding timeline
+            const passengerEvents = [
+                { time: "20:30", marker: "D-90", text: "Gate opened" },
+                { time: "20:45", marker: "D-75", text: "Pre-boarding announcement" },
+                { time: "20:50", marker: "D-70", text: "Priority boarding started" },
+                { time: "21:00", marker: "D-60", text: "General boarding started" },
+                { time: "21:30", marker: "D-30", text: "Final boarding call" },
+                { time: "21:45", marker: "D-15", text: "Boarding completed" },
+                { time: "21:50", marker: "D-10", text: "Aircraft door closed" },
+                { time: "21:55", marker: "D-5", text: "Final safety checks" },
+                { time: "22:00", marker: "D-0", text: "Scheduled departure time" },
+                { time: "22:03", marker: "D+3", text: "Aircraft pushed back" }
+            ];
+            
+            addTemplateEntries(passengerEvents);
+        }
+        
+        // Load full timeline template
+        function loadFullTemplate() {
+            // Clear existing entries
+            document.getElementById('timelineEntries').innerHTML = '';
+            
+            // Full departure sequence timeline
+            const fullEvents = [
+                { time: "20:00", marker: "D-120", text: "Crew briefing" },
+                { time: "20:15", marker: "D-105", text: "Aircraft arrived at gate" },
+                { time: "20:25", marker: "D-95", text: "Cabin cleaning started" },
+                { time: "20:30", marker: "D-90", text: "Trip sheet released" },
+                { time: "20:35", marker: "D-85", text: "Crew Chief pulled trip sheet" },
+                { time: "20:40", marker: "D-80", text: "Catering started" },
+                { time: "20:44", marker: "D-76", text: "Ramp crew showed up at the gate" },
+                { time: "20:50", marker: "D-70", text: "Priority boarding started / Fueling started" },
+                { time: "20:53", marker: "D-67", text: "First ULD loaded FWD" },
+                { time: "20:56", marker: "D-64", text: "First ULD loaded AFT" },
+                { time: "21:00", marker: "D-60", text: "General boarding started" },
+                { time: "21:10", marker: "D-50", text: "Catering completed" },
+                { time: "21:15", marker: "D-45", text: "Fueling completed" },
+                { time: "21:30", marker: "D-30", text: "Final boarding call" },
+                { time: "21:36", marker: "D-24", text: "Last ULD loaded FWD" },
+                { time: "21:40", marker: "D-20", text: "FWD cargo door closed" },
+                { time: "21:45", marker: "D-15", text: "Boarding completed" },
+                { time: "21:50", marker: "D-10", text: "Aircraft door closed" },
+                { time: "21:53", marker: "D-7", text: "Last ULD loaded AFT" },
+                { time: "21:55", marker: "D-5", text: "Final cabin check" },
+                { time: "21:58", marker: "D-2", text: "Bulk door closed" },
+                { time: "22:00", marker: "D-0", text: "AFT cargo door closed / STD" },
+                { time: "22:03", marker: "D+3", text: "Aircraft pushed back" }
+            ];
+            
+            addTemplateEntries(fullEvents);
+        }
+        
+        function addTemplateEntries(events) {
+            const entriesList = document.getElementById('timelineEntries');
+            
+            events.forEach(event => {
+                const entryItem = document.createElement('div');
+                entryItem.className = 'entry-item';
+                entryItem.innerHTML = `
+                    <div class="time">${event.time}</div>
+                    <div class="marker">${event.marker}</div>
+                    <div class="text">${event.text}</div>
+                    <div class="actions print-hidden">
+                        <button type="button" class="btn btn-danger btn-sm remove-entry">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                entriesList.appendChild(entryItem);
+                
+                // Add event listener to remove button
+                entryItem.querySelector('.remove-entry').addEventListener('click', function() {
+                    entriesList.removeChild(entryItem);
+                });
+            });
+        }
+        
+        // Calculate time markers based on STD
+        function calculateMarkers() {
+            const std = document.getElementById('std').value;
+            if (!std) {
+                alert('Please enter STD (Standard Time of Departure) first.');
+                return;
+            }
+            
+            // Parse STD to minutes since midnight
+            const [stdHours, stdMinutes] = std.split(':').map(Number);
+            const stdTotalMinutes = stdHours * 60 + stdMinutes;
+            
+            // Update markers for all timeline entries
+            document.querySelectorAll('#timelineEntries .entry-item').forEach(item => {
+                const timeElement = item.querySelector('.time');
+                const markerElement = item.querySelector('.marker');
+                const timeText = timeElement.textContent;
+                
+                if (timeText.includes(':')) {
+                    const [hours, minutes] = timeText.split(':').map(Number);
+                    const totalMinutes = hours * 60 + minutes;
+                    
+                    const diffMinutes = totalMinutes - stdTotalMinutes;
+                    
+                    if (diffMinutes === 0) {
+                        markerElement.textContent = 'D-0';
+                    } else if (diffMinutes > 0) {
+                        markerElement.textContent = `D+${diffMinutes}`;
+                    } else {
+                        markerElement.textContent = `D-${Math.abs(diffMinutes)}`;
+                    }
+                }
+            });
+            
+            alert('Timeline markers calculated based on STD.');
+        }
+        
+        // Sort timeline by time
+        function sortTimeline() {
+            const entriesList = document.getElementById('timelineEntries');
+            const entries = Array.from(entriesList.querySelectorAll('.entry-item'));
+            
+            if (entries.length <= 1) return;
+            
+            entries.sort((a, b) => {
+                const timeA = a.querySelector('.time').textContent;
+                const timeB = b.querySelector('.time').textContent;
+                
+                // Convert to comparable format
+                const getMinutes = (timeStr) => {
+                    if (!timeStr.includes(':')) return 0;
+                    const [hours, minutes] = timeStr.split(':').map(Number);
+                    return hours * 60 + minutes;
+                };
+                
+                return getMinutes(timeA) - getMinutes(timeB);
+            });
+            
+            // Clear and re-append in sorted order
+            entriesList.innerHTML = '';
+            entries.forEach(entry => entriesList.appendChild(entry));
+            
+            alert('Timeline sorted by time.');
+        }
+        
+        // Generate HTML report for preview
+        function generateReportHTML() {
+            // Get form values
+            const flightNumber = document.getElementById('flightNumber').value || '[Flight Number]';
+            const flightDate = document.getElementById('flightDate').value 
+                ? new Date(document.getElementById('flightDate').value).toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                })
+                : '[Date]';
+            const origin = document.getElementById('origin').value || '';
+            const destination = document.getElementById('destination').value || '';
+            const aircraft = document.getElementById('aircraft').value || '';
+            const shipNumber = document.getElementById('shipNumber').value || '';
+            const terminal = document.getElementById('terminal').value || '';
+            const gateNumber = document.getElementById('gateNumber').value || '';
+            const gate = terminal && gateNumber ? `${terminal}${gateNumber}` : (terminal || gateNumber || '');
+            
+            const std = formatTime(document.getElementById('std').value) || '[STD]';
+            const atd = formatTime(document.getElementById('atd').value) || '[ATD]';
+            const delayDuration = document.getElementById('delayDuration').value || '';
+            const delayCode = document.getElementById('delayCode').value || '';
+            const delayInfo = document.getElementById('delayInfo').value || `${delayDuration}-minute delay ${delayCode}`;
+            
+            const actionStatus = document.getElementById('actionToggle').checked ? 'On' : 'Off';
+            
+            const csm = document.getElementById('csm').value || '[CSM]';
+            const allocator = document.getElementById('allocator').value || '[Allocator]';
+            const crewChief = document.getElementById('crewChief').value || '[Crew Chief]';
+            const mod = document.getElementById('mod').value || '';
+            
+            const correctiveActions = document.getElementById('correctiveActions').value || '';
+            const recommendations = document.getElementById('recommendations').value || '';
+            const allocatorNotes = document.getElementById('allocatorNotes').value || '';
+            
+            // Generate HTML
+            let html = `
+                <div class="report-container">
+                    <div style="text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #0054a6;">
+                        <h1 style="margin: 0 0 5px 0; color: #0054a6; font-size: 1.8rem;">Ramp Delay Report</h1>
+                        <div style="font-size: 1.2rem;">${flightNumber} ${origin && destination ? `| ${origin} → ${destination}` : ''}</div>
+                        <div style="margin-top: 10px; font-size: 0.9rem;">${flightDate}</div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+                        <h2 style="color: #0054a6; font-size: 1.2rem; margin-bottom: 10px;">Flight Information</h2>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <div><strong>Aircraft:</strong> ${aircraft}</div>
+                                <div><strong>Ship Number:</strong> ${shipNumber}</div>
+                                <div><strong>Gate/Position:</strong> ${gate}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+                        <h2 style="color: #0054a6; font-size: 1.2rem; margin-bottom: 10px;">Operational Impact</h2>
+                        <div><strong>STD:</strong> ${std} | <strong>ATD:</strong> ${atd}</div>
+                        <div><strong>Delay:</strong> ${delayInfo}</div>
+                        <div><strong>Action Status:</strong> <span style="color: ${actionStatus === 'On' ? 'green' : 'inherit'}">${actionStatus}</span></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+                        <h2 style="color: #0054a6; font-size: 1.2rem; margin-bottom: 10px;">Personnel</h2>
+                        <div><strong>CSM:</strong> ${csm}</div>
+                        <div><strong>Allocator:</strong> ${allocator}</div>
+                        <div><strong>Crew Chief:</strong> ${crewChief}</div>
+                        ${mod ? `<div><strong>MOD:</strong> ${mod}</div>` : ''}
+                    </div>
+            `;
+            
+            // Timeline
+            html += `
+                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+                    <h2 style="color: #0054a6; font-size: 1.2rem; margin-bottom: 10px;">Delay Timeline</h2>
+            `;
+            
+            // Get timeline entries
+            const timelineEntries = document.querySelectorAll('#timelineEntries .entry-item');
+            if (timelineEntries.length > 0) {
+                html += '<div style="padding-left: 10px;">';
+                timelineEntries.forEach(entry => {
+                    const time = entry.querySelector('.time').textContent;
+                    const marker = entry.querySelector('.marker').textContent;
+                    const text = entry.querySelector('.text').textContent;
+                    
+                    html += `
+                        <div style="display: flex; margin-bottom: 8px; align-items: baseline;">
+                            <div style="width: 70px; font-weight: bold; margin-right: 15px; color: #0054a6;">${time}</div>
+                            <div style="color: #6c757d; margin-right: 10px; font-size: 0.9rem;">${marker}</div>
+                            <div style="flex: 1;">${text}</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            } else {
+                html += '<div>No timeline entries recorded.</div>';
+            }
+            
+            html += '</div>';
+            
+            // Contributing factors
+            html += `
+                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+                    <h2 style="color: #0054a6; font-size: 1.2rem; margin-bottom: 10px;">Contributing Factors</h2>
+            `;
+            
+            // Get factor entries
+            const factorEntries = document.querySelectorAll('#factorEntries .entry-item');
+            if (factorEntries.length > 0) {
+                html += '<ul style="margin: 0; padding-left: 20px;">';
+                factorEntries.forEach(entry => {
+                    const text = entry.querySelector('.text').textContent;
+                    html += `<li style="margin-bottom: 5px;">${text}</li>`;
+                });
+                html += '</ul>';
+            } else {
+                html += '<div>No contributing factors recorded.</div>';
+            }
+            
+            html += '</div>';
+            
+            // Actions & Notes
+            if (correctiveActions || recommendations || allocatorNotes) {
+                html += `
+                    <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+                        <h2 style="color: #0054a6; font-size: 1.2rem; margin-bottom: 10px;">Actions & Notes</h2>
+                `;
+                
+                if (correctiveActions) {
+                    html += `
+                        <div style="margin-bottom: 15px;">
+                            <h3 style="font-size: 1rem; margin-bottom: 5px;">Corrective Actions Taken</h3>
+                            <div>${correctiveActions}</div>
+                        </div>
+                    `;
+                }
+                
+                if (recommendations) {
+                    html += `
+                        <div style="margin-bottom: 15px;">
+                            <h3 style="font-size: 1rem; margin-bottom: 5px;">Recommendations</h3>
+                            <div>${recommendations}</div>
+                        </div>
+                    `;
+                }
+                
+                if (allocatorNotes) {
+                    html += `
+                        <div>
+                            <h3 style="font-size: 1rem; margin-bottom: 5px;">Allocator Task Notes</h3>
+                            <div>${allocatorNotes}</div>
+                        </div>
+                    `;
+                }
+                
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            
+            return html;
+        }
+    </script>
+</body>
+</html>
