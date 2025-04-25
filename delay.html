@@ -722,6 +722,9 @@
                         <button type="button" class="btn btn-success" id="generatePDF">
                             <i class="fas fa-file-pdf"></i> Generate PDF
                         </button>
+                        <button type="button" class="btn btn-outline" id="exportDoc">
+                            <i class="fas fa-file-word"></i> Export as DOC
+                        </button>
                     </div>
                 </div>
             </form>
@@ -751,6 +754,7 @@
             document.getElementById('resetForm').addEventListener('click', confirmResetForm);
             document.getElementById('printReport').addEventListener('click', printReport);
             document.getElementById('generatePDF').addEventListener('click', showPreview);
+            document.getElementById('exportDoc').addEventListener('click', exportAsDoc);
             document.getElementById('saveTemplate').addEventListener('click', saveTemplate);
             document.getElementById('closePreviewModal').addEventListener('click', closePreview);
             
@@ -1183,6 +1187,84 @@
             entries.forEach(entry => entriesList.appendChild(entry));
             
             alert('Timeline sorted by time.');
+        }
+        
+        // Export report as DOC file
+        function exportAsDoc() {
+            const reportHtml = generateReportHTML();
+            
+            // Create styles for Word document
+            const wordStyles = `
+                <style>
+                    body {
+                        font-family: 'Calibri', sans-serif;
+                        font-size: 11pt;
+                        line-height: 1.5;
+                    }
+                    h1 {
+                        font-size: 16pt;
+                        color: #0054a6;
+                    }
+                    h2 {
+                        font-size: 14pt;
+                        color: #0054a6;
+                        margin-top: 16pt;
+                        margin-bottom: 4pt;
+                    }
+                    h3 {
+                        font-size: 12pt;
+                        margin-top: 12pt;
+                        margin-bottom: 4pt;
+                    }
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    td, th {
+                        border: 1px solid #ddd;
+                        padding: 4pt;
+                    }
+                    ul, ol {
+                        margin-left: 20pt;
+                    }
+                </style>
+            `;
+            
+            // Format HTML for Word compatibility
+            const docContent = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+                      xmlns:w='urn:schemas-microsoft-com:office:word'>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Delay Report</title>
+                    ${wordStyles}
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <w:WordDocument>
+                            <w:View>Print</w:View>
+                            <w:Zoom>100</w:Zoom>
+                        </w:WordDocument>
+                    </xml>
+                    <![endif]-->
+                </head>
+                <body>
+                    ${reportHtml}
+                </body>
+                </html>
+            `;
+            
+            // Create blob and download
+            const blob = new Blob([docContent], { type: 'application/msword' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            
+            // Get flight info for filename
+            const flightNumber = document.getElementById('flightNumber').value || 'Report';
+            const today = new Date().toISOString().slice(0, 10);
+            
+            link.download = `Delay_Report_${flightNumber}_${today}.doc`;
+            link.click();
+            URL.revokeObjectURL(link.href);
         }
         
         // Generate HTML report for preview
