@@ -1,61 +1,57 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Airline Staff Portal</title>
-    <!-- Favicon and App Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assists/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assists/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assists/icons/favicon-16x16.png">
-    <link rel="manifest" href="assists/icons/site.webmanifest">
-    <link rel="shortcut icon" href="assists/icons/favicon.ico">
+    
+    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#0063c6">
+    <meta name="description" content="Essential tools for airline staff - flight tracking, quick links, and more">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AA Staff Portal">
+    <meta name="application-name" content="AA Staff Portal">
+    
+    <!-- Manifest (Inline Data URI) -->
+    <link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;Airline Staff Portal&quot;,&quot;short_name&quot;:&quot;AA Staff&quot;,&quot;description&quot;:&quot;Essential tools for airline staff&quot;,&quot;start_url&quot;:&quot;/index.html&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0063c6&quot;,&quot;theme_color&quot;:&quot;#0063c6&quot;,&quot;orientation&quot;:&quot;portrait-primary&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E✈️%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAMAAAAKE/YAAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABFUExURUxpcQBjxgBjxgBjxgBjxgBjxgBjxgBjxgBjxgBjxgBjxgBjxgBjxgBjxgBjxjqL0XOm25vF6LjT7tHi89vo9vP3+jQoS0cAAAAKdFJOUwC9P0n//////4ArQaSHAAAFVklEQVR42u2c63abMBCFhYkvYGOb93/VWhqBJQFG2/Sf7cxZa1pIyuYbzQVptEejbvnOVzG///yVLDlQOVA5UDlQOVA5UDlQOVA5UDlQOVA5UDlQOVA5UDlQOVA5UDlQOVA5UDlQ3xc0j1xXzhuXdSCfbRnDt4C+UbPUlYuaJlXTLpfLhf5M7V/UOxQHMx4fG/puodrSqkttMWxwt9BoEOxtQ/8UNHK7g40baPCJNg39U9Afpm0nE7WY1ULjq7z4bUMfXdSoywxQrzb0zbSqgyZUOm5oPo7vX+ygcUeVQ2cW2urVQI/7qQx14I5+aUDXXTqcLDQqx6aNPEBv5fCdQZsR1I6hkTi20KwH6FE5eunwgB7H9xvoSTnwBG166P4MdDe+jzEIwDhoDnWAPjvoaXzrqO2G06ChHB50B30eNKOXtfG9sRQDja9RB2jUARodwwaafbaPxndYOXrwDR3Gg37FQTMHPQ7v6/b4Xjf2u3L0v4N+Ax2g4aFb6IU0jmX70T2/KofuoMMEeqoc0NFNo/o9vnUL4xN0gJ5VjvVtNFWmfW0c0bR9xNW/k3JU76CnyhE6P6b7HvpYkS6TdECnQc+Vw6Zxe/UX0JGD6M1VDts/Z+O7csqxUTncl1UzM75b6NfK8blyhC42Ht9bA51TOTaUY3KnK4et3s74HhaNVQ78uwfoluYDdBblfkIRdbFufE/KUcVBLyrHp8pRbcX3BvpcOXLiO1E5cqCxZjAPGrO+Vw7XwK5Hd+KiYVaNr/EdlMNVjkn98qDj45ud9c9Vju6D+C49tR0/0GrlcEf3JB1ZlcPVuGp8I75XlWNdOSbl2FaOXOi08c0QoAtUD38q+Qydpxx4qXlKVo5M6HB6oDq6B+mc+HYrx9aiYVo5DuJbuXzl8BXSPGh0NV3V3Lzc+YyTt2goUT+YUY580xA7t62ND1T14n20csRBLyuHDvGdAT1XDpwdTE2sG99T5QgXjRLlYM54KFSO5kLQG5WjGt8JAxw7NnrQY/D4/hk6bdGQXjT+Xzl84jtzyvEKdKZy5JuGStaPwsrBXOXYUI5Z5ZgqR96ikVI5CrYcuFPLcdA2vlaUo8ZoWHECnbho5CrHoRz0ZuVwE3mJ+O7HdxnoROUYJpXDVeO6mnRjp9D6jc5UGnT+ohHGdy50rnLMlKMkdKZyRKCTs86t8V1eOfzlTkl8T5VjOsFSlYMVVI7TTei1yqFtfB+BzlOOpTROLRoB+gh0nnLMKsfR+C5YOQ5A2x4a2pGsHLPI2KrRG8rh1g9VOUoqx9vKsaocJZUjfcrxb+jTKoeLbyPpHKGV41Dl2K4c85RjVTlOqxxHobOUY2F8Hy0cx5XjoHIsKMdUOSTlG6uHE6BXKsdmfK9XDreJpSYtdAr0eJJlTTkixnekchxXjlnlCCfYJZRjXjlAHaNOUA6I4HUztg9UDjEcRGcrh6ocRys0KkfR+N6qHIdMQ7PKEYePquuPQc+VI055rHKcVzlmJ1hmleNw5dhWDqcckxFQOeJJsKYcx05gzivH+fEdqRxRk54qR+XiuzZ0rnKcVjni2/hWzlAOZvbGiXKcVjni0KgcrBzRUShRDmFnfG8px3nl2KwccWg5vg/dZkFnKEfpytFExvdSOcaEKFU56qrKgU5Rjvj4TlGOwpXDHK0cSeM7XTnyKseacoQbMV3uolG6cvwKelbulKocpU9g1u/SfjG6S1YOvVnjKz+lK8e38Z88mFUOedVnQWrjL4cVhtaLpJuqVQj6yC+JFP0pkaI/tlL0526K/mCQoj9tpOiPNyn6E1iK/liYoj+rpugPlv0FLbCwJ/8+G/MAAAAASUVORK5CYII=">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
+    
+    <!-- External CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Inline CSS -->
     <style>
         :root {
             --primary-color: #0063c6;
-            --primary-dark: #c1e0ff;
+            --primary-dark: #004d9e;
             --primary-light: #e6f0ff;
             --accent-color: #e40046;
             --accent-dark: #b80039;
-            --text-color: #ddeeff;
+            --text-color: #333333;
             --background-color: #f8fafc;
             --card-color: #ffffff;
             --border-radius: 12px;
             --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --transition: all 0.2s ease;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
         }
 
+        /* Dark Mode Variables */
         .dark-mode {
             --text-color: #f1f5f9;
             --background-color: #0f172a;
             --card-color: #1e293b;
             --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --primary-light: #afc5ff;
-        }
-        
-        .dark-mode body {
-            background-image: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        }
-        
-        .dark-mode input, .dark-mode select {
-            background-color: #334155;
-            color: white;
-            border-color: #475569;
-        }
-        
-        .dark-mode .card, 
-        .dark-mode .mini-card, 
-        .dark-mode .time-display {
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .dark-mode .link-item {
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            --primary-light: #1a365d;
         }
 
+        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -66,23 +62,30 @@
         body {
             background-color: var(--background-color);
             color: var(--text-color);
-            padding: 10px;
+            padding: env(safe-area-inset-top, 10px) env(safe-area-inset-right, 10px) env(safe-area-inset-bottom, 10px) env(safe-area-inset-left, 10px);
             max-width: 100%;
             overflow-x: hidden;
-            background-image: linear-gradient(135deg, #f8fafc 0%, #e6f0ff 100%);
             min-height: 100vh;
+            transition: background-color 0.3s ease;
         }
 
         .container {
             max-width: 540px;
             margin: 0 auto;
+            transition: all 0.3s ease;
         }
 
+        /* Header Styles */
         .header-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 8px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
         }
 
         .logo-text {
@@ -95,17 +98,24 @@
         .logo-icon {
             color: var(--accent-color);
             margin-right: 5px;
+            font-size: 1.2rem;
         }
 
-        /* Dark Mode Toggle */
-        .dark-mode-toggle {
+        /* Toggle Switches */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-group {
             display: flex;
             align-items: center;
         }
 
         .toggle-label {
             font-size: 0.7rem;
-            margin-right: 5px;
+            margin-left: 4px;
             color: var(--text-color);
         }
 
@@ -154,12 +164,13 @@
             transform: translateX(18px);
         }
 
+        /* Time Display */
         .time-display {
             background-color: var(--card-color);
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            padding: 8px 12px;
-            margin-bottom: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
             border: 1px solid rgba(0, 99, 198, 0.08);
             display: flex;
             justify-content: space-between;
@@ -187,35 +198,77 @@
             font-weight: 500;
         }
 
-        .mini-card {
+        /* Cards */
+        .mini-card, .card {
             background-color: var(--card-color);
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            padding: 10px;
-            margin-bottom: 8px;
             border: 1px solid rgba(0, 99, 198, 0.08);
             transition: var(--transition);
+        }
+
+        .mini-card {
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .card {
+            padding: 16px;
+            margin-bottom: 16px;
         }
 
         .mini-title {
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--primary-color);
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
         }
 
         .mini-title i {
-            margin-right: 5px;
+            margin-right: 7px;
             font-size: 0.8rem;
             color: var(--accent-color);
         }
 
+        h2 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        h2 i {
+            margin-right: 8px;
+            color: var(--accent-color);
+        }
+
+        /* Forms */
         .compact-form {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex: 1;
+        }
+
+        .airline-select {
+            width: 70px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+        }
+
+        .input-group input {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-left: none;
         }
 
         .search-row {
@@ -242,218 +295,24 @@
             text-decoration: underline;
         }
 
-        .card {
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 15px;
-            margin-bottom: 15px;
-            transition: var(--transition);
-            border: 1px solid rgba(0, 99, 198, 0.08);
-        }
-
-        .collapsible-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            padding-bottom: 8px;
-        }
-
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .collapsible-content.active {
-            max-height: 2000px; /* Increased for larger content */
-        }
-
-        h2 {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-        }
-
-        h2 i {
-            margin-right: 8px;
-            color: var(--accent-color);
-        }
-
-        /* Calculator Styles */
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.8rem;
-            margin-bottom: 3px;
-            font-weight: 500;
-            color: var(--text-color);
-        }
-
-        .time-input-group {
-            display: flex;
-            gap: 8px;
-        }
-
-        .time-input-group input {
-            flex: 1;
-        }
-
-        .result-container {
-            background-color: var(--primary-light);
-            padding: 10px;
-            border-radius: var(--border-radius);
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .result-label {
-            font-size: 0.8rem;
-            margin-bottom: 3px;
-        }
-
-        .result-value {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        /* Aviation Reference Styles */
-        .tabs {
-            display: flex;
-            margin-bottom: 12px;
-            border-bottom: 1px solid rgba(0, 99, 198, 0.2);
-        }
-
-        .tab {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            color: var(--text-color);
-        }
-
-        .tab.active {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .placeholder-title {
-            font-weight: 600;
-            color: var(--primary-color);
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-
-        .placeholder-text {
-            font-size: 0.85rem;
-            color: var(--text-color);
-        }
-
-        /* Time Calculator Styles */
-        .time-zone-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            gap: 8px;
-        }
-
-        .time-zone-select {
-            flex: 1;
-        }
-
-        /* Calculator Tabs */
-        .calc-tabs {
-            display: flex;
-            margin-bottom: 12px;
-            border-bottom: 1px solid rgba(0, 99, 198, 0.2);
-        }
-
-        .calc-tab {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            color: var(--text-color);
-        }
-
-        .calc-tab.active {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .calc-content {
-            display: none;
-        }
-
-        .calc-content.active {
-            display: block;
-        }
-
-        /* Links Grid */
-        .quick-links {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .link-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--primary-light);
-            color: var(--primary-color);
-            text-decoration: none;
-            padding: 12px 5px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: var(--transition);
-            height: 100%;
-            border: 1px solid rgba(0, 99, 198, 0.1);
-        }
-
-        .link-item i {
-            font-size: 1.5rem;
-            margin-bottom: 6px;
-        }
-
-        .link-item:hover, .link-item:active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        /* Forms */
+        /* Form Elements */
         input, select, button {
-            padding: 8px 10px;
+            padding: 8px 12px;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: var(--transition);
         }
 
         input, select {
             background-color: #f8fafc;
             color: #1e293b;
+        }
+
+        .dark-mode input, .dark-mode select {
+            background-color: #334155;
+            color: white;
+            border-color: #475569;
         }
 
         .compact-input {
@@ -489,59 +348,289 @@
             background-color: var(--primary-dark);
         }
 
-        .footer {
+        /* Quick Links */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .link-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 12px 5px;
+            border-radius: var(--border-radius);
             text-align: center;
-            margin-top: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+            height: 100%;
+            border: 1px solid rgba(0, 99, 198, 0.1);
+        }
+
+        .link-item i {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
+
+        .link-item:hover, .link-item:active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .dark-mode .link-item {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: #1a365d;
+        }
+
+        /* Result Containers */
+        .result-container {
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        /* Offline Indicator */
+        .offline-indicator {
+            background-color: var(--warning-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .offline-indicator i {
+            margin-right: 5px;
+        }
+
+        .offline .offline-indicator {
+            display: flex;
+        }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
             color: #64748b;
             font-size: 0.8rem;
         }
 
-        /* Scrollable containers */
-        .scrollable-content {
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 5px;
+        .update-badge {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
         }
 
-        /* Scrollbar styling */
-        .scrollable-content::-webkit-scrollbar {
-            width: 4px;
+        .hidden {
+            display: none;
         }
-        
-        .scrollable-content::-webkit-scrollbar-track {
-            background: rgba(0, 99, 198, 0.05);
-            border-radius: 10px;
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
         }
-        
-        .scrollable-content::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 10px;
+
+        .modal-content {
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-weight: 600;
+        }
+
+        /* Small screen mode - only hides extras, doesn't change width */
+        .small-screen-mode .container {
+            height: auto;
+            overflow-y: visible;
+            border: none;
+            border-radius: 0;
+            padding: 10px;
+        }
+
+        /* Hide everything except essentials in small screen mode */
+        .small-screen-mode .card,
+        .small-screen-mode .footer {
+            display: none !important;
+        }
+
+        /* Keep normal spacing for the visible elements */
+        .small-screen-mode .time-display {
+            margin-bottom: 10px;
+        }
+
+        .small-screen-mode .mini-card {
+            margin-bottom: 10px;
         }
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(3px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .time-display { animation: fadeIn 0.1s ease forwards; }
-        .mini-card:nth-child(3) { animation: fadeIn 0.15s ease forwards; }
-        .mini-card:nth-child(4) { animation: fadeIn 0.2s ease forwards; }
-        .card { animation: fadeIn 0.25s ease forwards; }
-        .footer { animation: fadeIn 0.3s ease forwards; }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        /* Media Queries */
+        @media (max-width: 480px) {
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+        }
+
+        .notification.error {
+            background-color: var(--error-color);
+        }
+
+        .notification.warning {
+            background-color: var(--warning-color);
+        }
+
+        .notification.info {
+            background-color: var(--primary-color);
+        }
+
+        /* Airport Info Styles */
+        .airport-info {
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .airport-info p {
+            margin-bottom: 6px;
+        }
+
+        .action-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .action-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .action-links a i {
+            margin-right: 4px;
+        }
+
+        .action-links a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header with Dark Mode Toggle -->
+        <!-- Header with Toggles -->
         <div class="header-row">
-            <div class="logo-text"><i class="fas fa-plane logo-icon"></i>Airline Staff Portal</div>
-            <div class="dark-mode-toggle">
-                <span class="toggle-label">Dark</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="dark-mode-toggle">
-                    <span class="toggle-slider"></span>
-                </label>
+            <div class="logo-container">
+                <i class="fas fa-plane logo-icon"></i>
+                <div class="logo-text">Airline Staff Portal</div>
+            </div>
+            <div class="toggle-container">
+                <div class="toggle-group">
+                    <label class="toggle-switch" title="Small Screen Mode">
+                        <input type="checkbox" id="small-screen-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">3.6"</span>
+                </div>
+                
+                <div class="toggle-group">
+                    <label class="toggle-switch" title="Dark Mode">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Dark</span>
+                </div>
             </div>
         </div>
 
@@ -559,27 +648,48 @@
             </div>
         </div>
 
-        <!-- Condensed Flight Tracker - Vertical -->
+        <!-- Offline Mode Indicator -->
+        <div id="offline-indicator" class="offline-indicator">
+            <i class="fas fa-wifi-slash"></i> Offline Mode - Some features may not be available
+        </div>
+
+        <!-- Condensed Flight Tracker -->
         <div class="mini-card">
             <div class="mini-title"><i class="fas fa-plane-departure"></i>Track Flight</div>
             <form id="flight-tracker-form" class="compact-form">
-                <input type="hidden" id="airline-code" value="AAL">
-                <input type="number" id="flight-number" class="compact-input" placeholder="AAL Flight #" pattern="[0-9]*" inputmode="numeric">
+                <div class="input-group">
+                    <select id="airline-select" class="airline-select">
+                        <option value="AAL">AA</option>
+                        <option value="DAL">DL</option>
+                        <option value="UAL">UA</option>
+                        <option value="SWA">WN</option>
+                    </select>
+                    <input type="number" id="flight-number" class="compact-input" placeholder="Flight #" pattern="[0-9]*" inputmode="numeric">
+                </div>
                 <select id="tracking-service">
                     <option value="flightaware">FA</option>
                     <option value="flightradar24">FR24</option>
                 </select>
-                <button type="submit"><i class="fas fa-search"></i>Go</button>
+                <button type="submit" aria-label="Track Flight"><i class="fas fa-search"></i>Go</button>
             </form>
         </div>
 
-        <!-- Condensed Search - Vertical -->
+        <!-- Baggage Tracker -->
+        <div class="mini-card">
+            <div class="mini-title"><i class="fas fa-suitcase"></i>Baggage Lookup</div>
+            <form id="baggage-lookup-form" class="compact-form">
+                <input type="text" id="baggage-tag" class="compact-input" placeholder="Bag Tag #" pattern="[0-9]*" inputmode="numeric">
+                <button type="submit" aria-label="Search Baggage"><i class="fas fa-search"></i>Go</button>
+            </form>
+        </div>
+
+        <!-- Condensed Search -->
         <div class="mini-card">
             <div class="mini-title"><i class="fas fa-search"></i>Search Google</div>
             <form id="google-search-form">
                 <div class="compact-form">
                     <input type="text" name="q" placeholder="Search query..." id="google-search-box" class="compact-input" autocomplete="off">
-                    <button type="submit"><i class="fas fa-arrow-right"></i>Go</button>
+                    <button type="submit" aria-label="Search Google"><i class="fas fa-arrow-right"></i>Go</button>
                 </div>
                 <div class="search-row">
                     <a href="https://www.google.com/advanced_search" target="_blank" class="adv-search-link">
@@ -615,557 +725,642 @@
                 </a>
                 <a href="https://hcchold.replit.app/" class="link-item" target="_blank">
                     <i class="fas fa-clock"></i>
-                    <span>HCC Hold Tool</span>
+                    <span>HCC Tool</span>
+                </a>
+                <a href="https://newjetnet.aa.com/" class="link-item" target="_blank">
+                    <i class="fas fa-id-badge"></i>
+                    <span>Jetnet</span>
+                </a>
+                <a href="https://tools.crew.aa.com/losa/" class="link-item" target="_blank">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>LOSA</span>
+                </a>
+                <a href="#" class="link-item" id="add-link-btn">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Link</span>
                 </a>
             </div>
         </div>
 
-        <!-- Aviation Reference (Collapsible) -->
+        <!-- Airport Info Card -->
         <div class="card">
-            <div class="collapsible-header" id="aviation-ref-header">
-                <h2><i class="fas fa-headset"></i>Aviation Reference</h2>
-                <i class="fas fa-chevron-down" id="aviation-collapse-icon"></i>
-            </div>
-            <div class="collapsible-content" id="aviation-ref-content">
-                <div class="tabs">
-                    <div class="tab active" data-tab="radio">Radio Phraseology</div>
-                    <div class="tab" data-tab="emergency">Emergency Procedures</div>
-                </div>
-                
-                <!-- Radio Phraseology Guide -->
-                <div class="tab-content active" id="radio-content">
-                    <div class="placeholder-title">test1234</div>
-                    <div class="placeholder-text">test4321</div>
-                </div>
-                
-                <!-- Emergency Procedures -->
-                <div class="tab-content" id="emergency-content">
-                    <div class="placeholder-title">test1234</div>
-                    <div class="placeholder-text">test4321</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- More Tools (Collapsible) -->
-        <div class="card">
-            <div class="collapsible-header" id="more-tools-header">
-                <h2><i class="fas fa-toolbox"></i>More Tools</h2>
-                <i class="fas fa-chevron-down" id="more-tools-collapse-icon"></i>
-            </div>
-            <div class="collapsible-content" id="more-tools-content">
-                <div class="quick-links" style="grid-template-columns: repeat(2, 1fr);">
-
-                    <a href="https://falcon.app.bags.aa.com/web/#/home" class="link-item" target="_blank">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Falcon</span>
-                    </a>
-                    <a href="https://webref.aa.com" class="link-item" target="_blank">
-                        <i class="fas fa-file-alt"></i>
-                        <span>Web REF</span>
-                    </a>
-                    <a href="https://google.com" class="link-item" target="_blank">
-                        <i class="fas fa-globe"></i>
-                        <span>pending</span>
-                    </a>
-                    <a href="https://aps.aa.com" class="link-item" target="_blank">
-                        <i class="fas fa-th"></i>
-                        <span>apps.aa.com</span>
-                    </a>
-                    <a href="https://client.arc-kiosk.com/login" class="link-item" target="_blank">
-                        <i class="fas fa-qrcode"></i>
-                        <span>ARC Scanners</span>
-                    </a>
-                    <a href="https://jetnet.aa.com" class="link-item" target="_blank">
-                        <i class="fas fa-network-wired"></i>
-                        <span>jetnet</span>
-                    </a>
-                    <a href="https://aa.sumtotal.host" class="link-item" target="_blank">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span>Learning Hub</span>
-                    </a>
-                    <a href="https://environmentalintelligencesuite.ibm.com/dashboard/f099dd94-68fe-4754-b30f-f41d2663d904" class="link-item" target="_blank">
-                        <i class="fas fa-cloud"></i>
-                        <span>IBM Weather</span>
-                    </a>
-                    <a href="https://lka.aa.com/TarmacMonitor/" class="link-item" target="_blank">
-                        <i class="fas fa-plane-arrival"></i>
-                        <span>Tarmac Monitor</span>
-                    </a>
-                    <a href="https://diversions.lka.aa.com/DiversionTracker/#/" class="link-item" target="_blank">
-                        <i class="fas fa-random"></i>
-                        <span>Diversion Tracker</span>
-                    </a>
-                </div>
-            </div>
+            <h2><i class="fas fa-info-circle"></i>Airport Info</h2>
+            <form id="airport-info-form" class="compact-form">
+                <input type="text" id="airport-code" class="compact-input" placeholder="Airport Code (e.g. DFW)" maxlength="3">
+                <button type="submit" aria-label="Get Airport Info"><i class="fas fa-search"></i>Go</button>
+            </form>
+            <div id="airport-info-result" class="result-container"></div>
         </div>
 
-        <!-- Calculators (Collapsible) -->
-        <div class="card">
-            <div class="collapsible-header" id="calculators-header">
-                <h2><i class="fas fa-calculator"></i>Calculators</h2>
-                <i class="fas fa-chevron-down" id="calculators-collapse-icon"></i>
-            </div>
-            <div class="collapsible-content" id="calculators-content">
-                <div class="calc-tabs">
-                    <div class="calc-tab active" data-tab="ot">OT Calculator</div>
-                    <div class="calc-tab" data-tab="time">Time Converter</div>
-                </div>
-                
-                <!-- OT Calculator -->
-                <div class="calc-content active" id="ot-content">
-                    <form id="ot-calculator-form">
-                        <!-- Scheduled Times -->
-                        <div class="form-group">
-                            <label>Scheduled Shift (24hr format)</label>
-                            <div class="time-input-group">
-                                <input type="text" id="scheduled-start" placeholder="Start (0800)" maxlength="4" pattern="[0-9]*">
-                                <input type="text" id="scheduled-end" placeholder="End (1630)" maxlength="4" pattern="[0-9]*">
-                            </div>
-                        </div>
-                        
-                        <!-- Actual Times -->
-                        <div class="form-group">
-                            <label>Actual Times Worked (24hr format)</label>
-                            <div class="time-input-group">
-                                <input type="text" id="actual-start" placeholder="Start (0745)" maxlength="4" pattern="[0-9]*">
-                                <input type="text" id="actual-end" placeholder="End (1800)" maxlength="4" pattern="[0-9]*">
-                            </div>
-                        </div>
-                        
-                        <button type="button" id="calculate-ot-btn"><i class="fas fa-calculator"></i>Calculate</button>
-                        
-                        <!-- Results -->
-                        <div class="result-container">
-                            <div class="result-label">Overtime Hours</div>
-                            <div class="result-value" id="ot-result">0.0 hours</div>
-                        </div>
-                    </form>
-                </div>
-                
-                <!-- Time Calculator -->
-                <div class="calc-content" id="time-content">
-                    <div class="form-group">
-                        <label>From Time Zone</label>
-                        <div class="time-zone-row">
-                            <select id="from-timezone" class="time-zone-select">
-                                <option value="-12">UTC-12:00 (Baker Island)</option>
-                                <option value="-11">UTC-11:00 (American Samoa)</option>
-                                <option value="-10">UTC-10:00 (Hawaii)</option>
-                                <option value="-9">UTC-09:00 (Alaska)</option>
-                                <option value="-8">UTC-08:00 (Pacific)</option>
-                                <option value="-7">UTC-07:00 (Mountain)</option>
-                                <option value="-6">UTC-06:00 (Central)</option>
-                                <option value="-5">UTC-05:00 (Eastern)</option>
-                                <option value="-4">UTC-04:00 (Atlantic)</option>
-                                <option value="-3">UTC-03:00 (Brasilia)</option>
-                                <option value="-2">UTC-02:00 (South Sandwich)</option>
-                                <option value="-1">UTC-01:00 (Azores)</option>
-                                <option value="0" selected>UTC±00:00 (London)</option>
-                                <option value="1">UTC+01:00 (Paris)</option>
-                                <option value="2">UTC+02:00 (Cairo)</option>
-                                <option value="3">UTC+03:00 (Moscow)</option>
-                                <option value="4">UTC+04:00 (Dubai)</option>
-                                <option value="5">UTC+05:00 (Karachi)</option>
-                                <option value="5.5">UTC+05:30 (Mumbai)</option>
-                                <option value="6">UTC+06:00 (Dhaka)</option>
-                                <option value="7">UTC+07:00 (Bangkok)</option>
-                                <option value="8">UTC+08:00 (Singapore)</option>
-                                <option value="9">UTC+09:00 (Tokyo)</option>
-                                <option value="9.5">UTC+09:30 (Adelaide)</option>
-                                <option value="10">UTC+10:00 (Sydney)</option>
-                                <option value="11">UTC+11:00 (Solomon Islands)</option>
-                                <option value="12">UTC+12:00 (Auckland)</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Time (24hr format)</label>
-                        <div class="time-input-group">
-                            <input type="text" id="time-hours" placeholder="HH" maxlength="2" pattern="[0-9]*">
-                            <input type="text" id="time-minutes" placeholder="MM" maxlength="2" pattern="[0-9]*">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>To Time Zone</label>
-                        <div class="time-zone-row">
-                            <select id="to-timezone" class="time-zone-select">
-                                <option value="-12">UTC-12:00 (Baker Island)</option>
-                                <option value="-11">UTC-11:00 (American Samoa)</option>
-                                <option value="-10">UTC-10:00 (Hawaii)</option>
-                                <option value="-9">UTC-09:00 (Alaska)</option>
-                                <option value="-8">UTC-08:00 (Pacific)</option>
-                                <option value="-7">UTC-07:00 (Mountain)</option>
-                                <option value="-6">UTC-06:00 (Central)</option>
-                                <option value="-5">UTC-05:00 (Eastern)</option>
-                                <option value="-4">UTC-04:00 (Atlantic)</option>
-                                <option value="-3">UTC-03:00 (Brasilia)</option>
-                                <option value="-2">UTC-02:00 (South Sandwich)</option>
-                                <option value="-1">UTC-01:00 (Azores)</option>
-                                <option value="0">UTC±00:00 (London)</option>
-                                <option value="1">UTC+01:00 (Paris)</option>
-                                <option value="2">UTC+02:00 (Cairo)</option>
-                                <option value="3">UTC+03:00 (Moscow)</option>
-                                <option value="4">UTC+04:00 (Dubai)</option>
-                                <option value="5">UTC+05:00 (Karachi)</option>
-                                <option value="5.5">UTC+05:30 (Mumbai)</option>
-                                <option value="6">UTC+06:00 (Dhaka)</option>
-                                <option value="7">UTC+07:00 (Bangkok)</option>
-                                <option value="8">UTC+08:00 (Singapore)</option>
-                                <option value="9">UTC+09:00 (Tokyo)</option>
-                                <option value="9.5">UTC+09:30 (Adelaide)</option>
-                                <option value="10">UTC+10:00 (Sydney)</option>
-                                <option value="11">UTC+11:00 (Solomon Islands)</option>
-                                <option value="12" selected>UTC+12:00 (Auckland)</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <button type="button" id="calculate-time-btn"><i class="fas fa-clock"></i>Calculate Time</button>
-                    
-                    <div class="result-container">
-                        <div class="result-label">Converted Time</div>
-                        <div class="result-value" id="time-result">--:--</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <!-- App Status -->
         <div class="footer">
-            <p>Airline Staff Portal • Mobile Dashboard</p>
+            <span>Airline Staff Portal • v1.2.5</span>
+            <span id="update-available" class="update-badge hidden">Update Available</span>
         </div>
     </div>
 
+    <!-- Notification Container -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Modal for adding custom links -->
+    <div id="add-link-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Add Custom Link</h3>
+            <form id="add-link-form">
+                <div class="form-group">
+                    <label for="link-name">Name:</label>
+                    <input type="text" id="link-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="link-url">URL:</label>
+                    <input type="url" id="link-url" required placeholder="https://">
+                </div>
+                <div class="form-group">
+                    <label for="link-icon">Icon:</label>
+                    <select id="link-icon">
+                        <option value="fa-link">Link</option>
+                        <option value="fa-plane">Plane</option>
+                        <option value="fa-suitcase">Suitcase</option>
+                        <option value="fa-clipboard">Clipboard</option>
+                        <option value="fa-calendar">Calendar</option>
+                        <option value="fa-user">User</option>
+                        <option value="fa-map">Map</option>
+                        <option value="fa-cog">Settings</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Add Link</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Inline JavaScript -->
     <script>
-        // Dark Mode Toggle
+        // DOM elements
+        const localTimeElement = document.getElementById('local-time');
+        const localDateElement = document.getElementById('local-date');
+        const utcTimeElement = document.getElementById('utc-time');
+        const utcDateElement = document.getElementById('utc-date');
         const darkModeToggle = document.getElementById('dark-mode-toggle');
-        
-        // Check for saved preference
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.documentElement.classList.add('dark-mode');
-            darkModeToggle.checked = true;
-        }
-        
-        darkModeToggle.addEventListener('change', function() {
-            if (this.checked) {
-                document.documentElement.classList.add('dark-mode');
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                document.documentElement.classList.remove('dark-mode');
-                localStorage.setItem('darkMode', 'disabled');
-            }
-        });
-        
-        // More Tools Section
-        const moreToolsHeader = document.getElementById('more-tools-header');
-        const moreToolsContent = document.getElementById('more-tools-content');
-        const moreToolsCollapseIcon = document.getElementById('more-tools-collapse-icon');
-        
-        // Check for saved state
-        if (localStorage.getItem('moreToolsOpen') === 'true') {
-            moreToolsContent.classList.add('active');
-            moreToolsCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-        }
-        
-        moreToolsHeader.addEventListener('click', function() {
-            moreToolsContent.classList.toggle('active');
-            
-            if (moreToolsContent.classList.contains('active')) {
-                moreToolsCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-                localStorage.setItem('moreToolsOpen', 'true');
-            } else {
-                moreToolsCollapseIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-                localStorage.setItem('moreToolsOpen', 'false');
-            }
-        });
+        const smallScreenToggle = document.getElementById('small-screen-toggle');
+        const flightTrackerForm = document.getElementById('flight-tracker-form');
+        const baggageLookupForm = document.getElementById('baggage-lookup-form');
+        const googleSearchForm = document.getElementById('google-search-form');
+        const airportInfoForm = document.getElementById('airport-info-form');
+        const airportInfoResult = document.getElementById('airport-info-result');
+        const addLinkBtn = document.getElementById('add-link-btn');
+        const addLinkModal = document.getElementById('add-link-modal');
+        const closeModalBtn = document.querySelector('.close-modal');
+        const addLinkForm = document.getElementById('add-link-form');
+        const notificationElement = document.getElementById('notification');
 
-        // Tab Switching - Aviation Reference
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Remove active class from all tabs
-                document.querySelectorAll('.tab').forEach(t => {
-                    t.classList.remove('active');
-                });
-                
-                // Add active class to clicked tab
-                this.classList.add('active');
-                
-                // Hide all tab content
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                
-                // Show selected tab content
-                const selectedTab = this.getAttribute('data-tab');
-                document.getElementById(selectedTab + '-content').classList.add('active');
-                
-                // Save tab state
-                localStorage.setItem('selectedRefTab', selectedTab);
-            });
-        });
-        
-        // Load saved tab state - Aviation Reference
-        const savedRefTab = localStorage.getItem('selectedRefTab');
-        if (savedRefTab) {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
+        // Custom links storage key
+        const CUSTOM_LINKS_KEY = 'airline-staff-portal-custom-links';
+        const APP_VERSION = '1.2.5';
+        const CACHE_VERSION = 'airline-staff-portal-v1.2.5';
+
+        // Initialize application
+        function initApp() {
+            // Initialize clock
+            updateTime();
+            setInterval(updateTime, 1000);
             
-            const tabToActivate = document.querySelector(`.tab[data-tab="${savedRefTab}"]`);
-            if (tabToActivate) {
-                tabToActivate.classList.add('active');
-                document.getElementById(savedRefTab + '-content').classList.add('active');
+            // Load saved preferences
+            loadSavedPreferences();
+            
+            // Load custom links
+            loadCustomLinks();
+            
+            // Initialize listeners
+            initEventListeners();
+            
+            // Check network status and set up listeners
+            updateOnlineStatus();
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+
+            // Register service worker
+            registerServiceWorker();
+
+            // Process URL parameters (for shortcuts)
+            processUrlParams();
+        }
+
+        // Process URL parameters
+        function processUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+            
+            if (action === 'track_flight') {
+                document.getElementById('flight-number').focus();
+            } else if (action === 'baggage_lookup') {
+                document.getElementById('baggage-tag').focus();
             }
         }
 
-        // Tab Switching - Calculators
-        document.querySelectorAll('.calc-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Remove active class from all tabs
-                document.querySelectorAll('.calc-tab').forEach(t => {
-                    t.classList.remove('active');
-                });
-                
-                // Add active class to clicked tab
-                this.classList.add('active');
-                
-                // Hide all tab content
-                document.querySelectorAll('.calc-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                
-                // Show selected tab content
-                const selectedTab = this.getAttribute('data-tab');
-                document.getElementById(selectedTab + '-content').classList.add('active');
-                
-                // Save tab state
-                localStorage.setItem('selectedCalcTab', selectedTab);
-            });
-        });
-        
-        // Load saved tab state - Calculators
-        const savedCalcTab = localStorage.getItem('selectedCalcTab');
-        if (savedCalcTab) {
-            document.querySelectorAll('.calc-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.calc-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            const tabToActivate = document.querySelector(`.calc-tab[data-tab="${savedCalcTab}"]`);
-            if (tabToActivate) {
-                tabToActivate.classList.add('active');
-                document.getElementById(savedCalcTab + '-content').classList.add('active');
-            }
-        }
-
-        // Aviation Reference Section
-        const aviationRefHeader = document.getElementById('aviation-ref-header');
-        const aviationRefContent = document.getElementById('aviation-ref-content');
-        const aviationCollapseIcon = document.getElementById('aviation-collapse-icon');
-        
-        // Check for saved state
-        if (localStorage.getItem('aviationRefOpen') === 'true') {
-            aviationRefContent.classList.add('active');
-            aviationCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-        }
-        
-        aviationRefHeader.addEventListener('click', function() {
-            aviationRefContent.classList.toggle('active');
-            
-            if (aviationRefContent.classList.contains('active')) {
-                aviationCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-                localStorage.setItem('aviationRefOpen', 'true');
-            } else {
-                aviationCollapseIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-                localStorage.setItem('aviationRefOpen', 'false');
-            }
-        });
-
-        // Calculators Section
-        const calculatorsHeader = document.getElementById('calculators-header');
-        const calculatorsContent = document.getElementById('calculators-content');
-        const calculatorsCollapseIcon = document.getElementById('calculators-collapse-icon');
-        
-        // Check for saved state
-        if (localStorage.getItem('calculatorsOpen') === 'true') {
-            calculatorsContent.classList.add('active');
-            calculatorsCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-        }
-        
-        calculatorsHeader.addEventListener('click', function() {
-            calculatorsContent.classList.toggle('active');
-            
-            if (calculatorsContent.classList.contains('active')) {
-                calculatorsCollapseIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-                localStorage.setItem('calculatorsOpen', 'true');
-            } else {
-                calculatorsCollapseIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-                localStorage.setItem('calculatorsOpen', 'false');
-            }
-        });
-        
-        // Time Zone Calculator
-        document.getElementById('calculate-time-btn').addEventListener('click', function() {
-            const fromTimezone = parseFloat(document.getElementById('from-timezone').value);
-            const toTimezone = parseFloat(document.getElementById('to-timezone').value);
-            const hours = parseInt(document.getElementById('time-hours').value);
-            const minutes = parseInt(document.getElementById('time-minutes').value);
-            
-            // Validate inputs
-            if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-                alert('Please enter valid hours (0-23) and minutes (0-59)');
-                return;
-            }
-            
-            // Convert to minutes since midnight UTC
-            let totalMinutesInUTC = (hours * 60 + minutes) - (fromTimezone * 60);
-            
-            // Adjust for day wrapping (keeping within 24 hours)
-            while (totalMinutesInUTC < 0) {
-                totalMinutesInUTC += 24 * 60;
-            }
-            totalMinutesInUTC = totalMinutesInUTC % (24 * 60);
-            
-            // Convert to destination timezone
-            let destinationMinutes = totalMinutesInUTC + (toTimezone * 60);
-            
-            // Adjust for day wrapping again
-            while (destinationMinutes < 0) {
-                destinationMinutes += 24 * 60;
-            }
-            destinationMinutes = destinationMinutes % (24 * 60);
-            
-            // Convert back to hours and minutes
-            const destHours = Math.floor(destinationMinutes / 60);
-            const destMinutes = destinationMinutes % 60;
-            
-            // Format and display
-            const formattedResult = `${destHours.toString().padStart(2, '0')}:${destMinutes.toString().padStart(2, '0')}`;
-            document.getElementById('time-result').textContent = formattedResult;
-        });
-        
-        // OT Calculator Function
-        document.getElementById('calculate-ot-btn').addEventListener('click', function() {
-            const scheduledStart = document.getElementById('scheduled-start').value;
-            const scheduledEnd = document.getElementById('scheduled-end').value;
-            const actualStart = document.getElementById('actual-start').value;
-            const actualEnd = document.getElementById('actual-end').value;
-            
-            // Validate inputs
-            if (!scheduledStart || !scheduledEnd || !actualStart || !actualEnd) {
-                alert('Please fill in all time fields');
-                return;
-            }
-            
-            // Convert time format to minutes since midnight
-            function timeToMinutes(timeStr) {
-                if (timeStr.length !== 4) {
-                    alert('Please use 4-digit format (e.g., 0800 for 8:00 AM)');
-                    return null;
-                }
-                
-                const hours = parseInt(timeStr.substring(0, 2));
-                const minutes = parseInt(timeStr.substring(2, 4));
-                
-                if (isNaN(hours) || isNaN(minutes) || hours > 23 || minutes > 59) {
-                    alert('Invalid time format. Use 24-hour format (e.g., 1645 for 4:45 PM)');
-                    return null;
-                }
-                
-                return hours * 60 + minutes;
-            }
-            
-            const schStartMins = timeToMinutes(scheduledStart);
-            const schEndMins = timeToMinutes(scheduledEnd);
-            const actStartMins = timeToMinutes(actualStart);
-            const actEndMins = timeToMinutes(actualEnd);
-            
-            if (schStartMins === null || schEndMins === null || actStartMins === null || actEndMins === null) {
-                return;
-            }
-            
-            // Adjust for overnight shifts
-            let scheduledDuration = schEndMins - schStartMins;
-            if (scheduledDuration < 0) scheduledDuration += 24 * 60; // Add 24 hours in minutes
-            
-            let actualDuration = actEndMins - actStartMins;
-            if (actualDuration < 0) actualDuration += 24 * 60;
-            
-            // Calculate OT (actual - scheduled)
-            const overtimeMinutes = Math.max(0, actualDuration - scheduledDuration);
-            const overtimeHours = overtimeMinutes / 60;
-            
-            // Display result
-            document.getElementById('ot-result').textContent = overtimeHours.toFixed(1) + ' hours';
-        });
-
-        // Update time function
-        function updateTimes() {
+        // Update time display
+        function updateTime() {
             const now = new Date();
             
-            // Local time
-            const localTimeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            const localDateOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            // Format local time
+            localTimeElement.textContent = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
             
-            document.getElementById('local-time').textContent = now.toLocaleTimeString(undefined, localTimeOptions);
-            document.getElementById('local-date').textContent = now.toLocaleDateString(undefined, localDateOptions);
+            localDateElement.textContent = now.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric' 
+            });
             
-            // UTC time
-            document.getElementById('utc-time').textContent = now.toUTCString().slice(17, 25); // Extract HH:MM:SS
-            document.getElementById('utc-date').textContent = now.toUTCString().slice(0, 16); // Extract day and date
+            // Format UTC time
+            utcTimeElement.textContent = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                timeZone: 'UTC' 
+            });
+            
+            utcDateElement.textContent = now.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                timeZone: 'UTC' 
+            });
         }
-        
-        // Initial update
-        updateTimes();
-        
-        // Update every second
-        setInterval(updateTimes, 1000);
 
-        // Flight Tracker Form Handler
-        document.getElementById('flight-tracker-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+        // Load user preferences
+        function loadSavedPreferences() {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            const smallScreenMode = localStorage.getItem('smallScreenMode') === 'true';
             
-            const airlineCode = document.getElementById('airline-code').value.trim();
-            const flightNumber = document.getElementById('flight-number').value.trim();
-            const trackingService = document.getElementById('tracking-service').value;
+            if (darkMode) {
+                darkModeToggle.checked = true;
+                document.documentElement.classList.add('dark-mode');
+            }
             
-            if (!flightNumber) {
-                alert('Please enter a flight number');
+            if (smallScreenMode) {
+                smallScreenToggle.checked = true;
+                document.body.classList.add('small-screen-mode');
+            }
+
+            // Check if we need to update if version has changed
+            const savedVersion = localStorage.getItem('appVersion');
+            if (savedVersion !== APP_VERSION) {
+                localStorage.setItem('appVersion', APP_VERSION);
+                if (savedVersion) {
+                    // Show update notification only if this is not first install
+                    showNotification(`Updated to version ${APP_VERSION}`, 'info');
+                }
+            }
+        }
+
+        // Initialize event listeners
+        function initEventListeners() {
+            // Dark mode toggle
+            darkModeToggle.addEventListener('change', function() {
+                document.documentElement.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', darkModeToggle.checked);
+            });
+
+            // Small screen toggle
+            smallScreenToggle.addEventListener('change', function() {
+                document.body.classList.toggle('small-screen-mode');
+                localStorage.setItem('smallScreenMode', smallScreenToggle.checked);
+            });
+
+            // Flight tracker form
+            flightTrackerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const flightNumber = document.getElementById('flight-number').value;
+                const airlineCode = document.getElementById('airline-select').value;
+                const trackingService = document.getElementById('tracking-service').value;
+                
+                if (!flightNumber) {
+                    showNotification('Please enter a flight number', 'error');
+                    return;
+                }
+                
+                let url;
+                if (trackingService === 'flightaware') {
+                    url = `https://flightaware.com/live/flight/${airlineCode}${flightNumber}`;
+                } else {
+                    url = `https://www.flightradar24.com/data/flights/${airlineCode.toLowerCase()}${flightNumber}`;
+                }
+                
+                window.open(url, '_blank');
+                showNotification('Opening flight tracker', 'success');
+            });
+
+            // Baggage lookup form
+            baggageLookupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const bagTagNumber = document.getElementById('baggage-tag').value;
+                
+                if (!bagTagNumber) {
+                    showNotification('Please enter a bag tag number', 'error');
+                    return;
+                }
+                
+                // In a real environment, this would point to your internal baggage system
+                window.open(`https://prime.app.bags.aa.com/web/?bagtag=${bagTagNumber}`, '_blank');
+                showNotification('Opening baggage search', 'success');
+            });
+
+            // Google search form
+            googleSearchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const searchQuery = document.getElementById('google-search-box').value;
+                
+                if (!searchQuery) {
+                    showNotification('Please enter a search query', 'error');
+                    return;
+                }
+                
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, '_blank');
+            });
+
+            // Airport info form
+            airportInfoForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const airportCode = document.getElementById('airport-code').value.toUpperCase();
+                
+                if (!airportCode || airportCode.length !== 3) {
+                    showNotification('Please enter a valid 3-letter airport code', 'error');
+                    return;
+                }
+                
+                fetchAirportInfo(airportCode);
+            });
+
+            // Add link button
+            addLinkBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openAddLinkModal();
+            });
+
+            // Close modal
+            closeModalBtn.addEventListener('click', closeAddLinkModal);
+            window.addEventListener('click', function(e) {
+                if (e.target === addLinkModal) {
+                    closeAddLinkModal();
+                }
+            });
+
+            // Add link form
+            addLinkForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                addCustomLink();
+            });
+
+            // Update badge click handler
+            document.getElementById('update-available').addEventListener('click', function() {
+                // Force reload from server, not cache
+                window.location.reload(true);
+            });
+        }
+
+        // Fetch airport information
+        async function fetchAirportInfo(airportCode) {
+            airportInfoResult.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+            
+            try {
+                // In a real app, you would fetch from an API
+                // For demo purposes, we'll use some hardcoded data
+                const airports = {
+                    'DFW': {
+                        name: 'Dallas/Fort Worth International Airport',
+                        city: 'Dallas',
+                        country: 'United States',
+                        terminals: 5,
+                        timezone: 'America/Chicago'
+                    },
+                    'JFK': {
+                        name: 'John F. Kennedy International Airport',
+                        city: 'New York',
+                        country: 'United States',
+                        terminals: 6,
+                        timezone: 'America/New_York'
+                    },
+                    'LAX': {
+                        name: 'Los Angeles International Airport',
+                        city: 'Los Angeles',
+                        country: 'United States',
+                        terminals: 9,
+                        timezone: 'America/Los_Angeles'
+                    },
+                    'ORD': {
+                        name: "O'Hare International Airport",
+                        city: 'Chicago',
+                        country: 'United States',
+                        terminals: 4,
+                        timezone: 'America/Chicago'
+                    },
+                    'LHR': {
+                        name: 'London Heathrow Airport',
+                        city: 'London',
+                        country: 'United Kingdom',
+                        terminals: 5,
+                        timezone: 'Europe/London'
+                    }
+                };
+                
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                if (airports[airportCode]) {
+                    const airport = airports[airportCode];
+                    airportInfoResult.innerHTML = `
+                        <div class="airport-info">
+                            <p><strong>${airport.name} (${airportCode})</strong></p>
+                            <p>${airport.city}, ${airport.country}</p>
+                            <p>Terminals: ${airport.terminals}</p>
+                            <p>Timezone: ${airport.timezone}</p>
+                            <div class="action-links">
+                                <a href="https://flightaware.com/live/airport/${airportCode}" target="_blank">
+                                    <i class="fas fa-plane"></i> Flight Status
+                                </a>
+                                <a href="https://www.google.com/maps/search/${encodeURIComponent(airport.name)}" target="_blank">
+                                    <i class="fas fa-map-marker-alt"></i> Map
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    airportInfoResult.innerHTML = `
+                        <div class="error-message">
+                            <p>No information found for airport code: ${airportCode}</p>
+                        </div>
+                    `;
+                    showNotification(`No data for ${airportCode}`, 'warning');
+                }
+            } catch (error) {
+                console.error('Error fetching airport info:', error);
+                airportInfoResult.innerHTML = `
+                    <div class="error-message">
+                        <p>Error loading airport information. Please try again.</p>
+                    </div>
+                `;
+                showNotification('Error loading airport data', 'error');
+            }
+        }
+
+        // Load custom links from localStorage
+        function loadCustomLinks() {
+            try {
+                const customLinks = JSON.parse(localStorage.getItem(CUSTOM_LINKS_KEY)) || [];
+                
+                // Add custom links to the grid before the "Add Link" button
+                customLinks.forEach(link => {
+                    addLinkToDOM(link);
+                });
+            } catch (error) {
+                console.error('Error loading custom links:', error);
+                showNotification('Error loading your custom links', 'error');
+            }
+        }
+
+        // Add a custom link to the DOM
+        function addLinkToDOM(link) {
+            const linkElement = document.createElement('a');
+            linkElement.href = link.url;
+            linkElement.className = 'link-item';
+            linkElement.target = '_blank';
+            linkElement.dataset.id = link.id;
+            
+            linkElement.innerHTML = `
+                <i class="fas ${link.icon}"></i>
+                <span>${link.name}</span>
+            `;
+            
+            // Add a delete option that shows on long press or right-click
+            linkElement.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                if (confirm(`Remove "${link.name}" from your quick links?`)) {
+                    removeCustomLink(link.id);
+                    linkElement.remove();
+                }
+            });
+            
+            // Add the link before the "Add Link" button
+            const quickLinksContainer = document.querySelector('.quick-links');
+            quickLinksContainer.insertBefore(linkElement, addLinkBtn);
+        }
+
+        // Open the add link modal
+        function openAddLinkModal() {
+            addLinkModal.style.display = 'flex';
+            document.getElementById('link-name').focus();
+        }
+
+        // Close the add link modal
+        function closeAddLinkModal() {
+            addLinkModal.style.display = 'none';
+            addLinkForm.reset();
+        }
+
+        // Add a custom link
+        function addCustomLink() {
+            const name = document.getElementById('link-name').value.trim();
+            const url = document.getElementById('link-url').value.trim();
+            const icon = document.getElementById('link-icon').value;
+            
+            if (!name || !url) {
+                showNotification('Please fill out all fields', 'error');
                 return;
             }
             
-            let url;
-            if (trackingService === 'flightradar24') {
-                url = `https://www.flightradar24.com/data/flights/${airlineCode}${flightNumber}`;
+            // Validate URL format
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                showNotification('URL must start with http:// or https://', 'error');
+                return;
+            }
+            
+            // Create link object
+            const newLink = {
+                id: Date.now().toString(),
+                name,
+                url,
+                icon
+            };
+            
+            // Save to localStorage
+            try {
+                const customLinks = JSON.parse(localStorage.getItem(CUSTOM_LINKS_KEY)) || [];
+                customLinks.push(newLink);
+                localStorage.setItem(CUSTOM_LINKS_KEY, JSON.stringify(customLinks));
+                
+                // Add to DOM
+                addLinkToDOM(newLink);
+                
+                // Close modal
+                closeAddLinkModal();
+                
+                showNotification('Link added successfully', 'success');
+            } catch (error) {
+                console.error('Error saving custom link:', error);
+                showNotification('Error saving link', 'error');
+            }
+        }
+
+        // Remove a custom link
+        function removeCustomLink(id) {
+            try {
+                const customLinks = JSON.parse(localStorage.getItem(CUSTOM_LINKS_KEY)) || [];
+                const updatedLinks = customLinks.filter(link => link.id !== id);
+                localStorage.setItem(CUSTOM_LINKS_KEY, JSON.stringify(updatedLinks));
+                
+                showNotification('Link removed', 'success');
+            } catch (error) {
+                console.error('Error removing custom link:', error);
+                showNotification('Error removing link', 'error');
+            }
+        }
+
+        // Update online status
+        function updateOnlineStatus() {
+            if (navigator.onLine) {
+                document.body.classList.remove('offline');
+                // If coming back online, check if we need to sync
+                if (window.serviceWorkerRegistration && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({
+                        type: 'ONLINE_AGAIN'
+                    });
+                }
             } else {
-                url = `https://flightaware.com/live/flight/${airlineCode}${flightNumber}`;
+                document.body.classList.add('offline');
+                showNotification('You are now offline. Some features may be limited.', 'warning');
             }
-            
-            window.open(url, '_blank');
-        });
+        }
 
-        // Google Search Form Handler
-        document.getElementById('google-search-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
             
-            const searchQuery = document.getElementById('google-search-box').value.trim();
-            
-            if (!searchQuery) {
-                return;
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Register service worker
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    // Create an inline service worker with the content below
+                    const swContent = `
+                        // Service Worker for Airline Staff Portal PWA
+                        const CACHE_NAME = '${CACHE_VERSION}';
+                        const RUNTIME_CACHE = 'runtime-cache';
+
+                        // Installation event - cache essential assets
+                        self.addEventListener('install', event => {
+                            event.waitUntil(
+                                caches.open(CACHE_NAME)
+                                    .then(cache => {
+                                        // Cache the main HTML document
+                                        return cache.add('/');
+                                    })
+                                    .then(() => self.skipWaiting())
+                            );
+                        });
+
+                        // Activation event - clean up old caches
+                        self.addEventListener('activate', event => {
+                            const currentCaches = [CACHE_NAME, RUNTIME_CACHE];
+                            event.waitUntil(
+                                caches.keys().then(cacheNames => {
+                                    return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+                                }).then(cachesToDelete => {
+                                    return Promise.all(cachesToDelete.map(cacheToDelete => {
+                                        return caches.delete(cacheToDelete);
+                                    }));
+                                }).then(() => self.clients.claim())
+                            );
+                        });
+
+                        // Fetch event - serve from cache or network with cache fallback
+                        self.addEventListener('fetch', event => {
+                            // Skip cross-origin requests
+                            if (!event.request.url.startsWith(self.location.origin) && 
+                                !event.request.url.includes('cdnjs.cloudflare.com')) {
+                                return;
+                            }
+                            
+                            event.respondWith(
+                                caches.match(event.request).then(cachedResponse => {
+                                    if (cachedResponse) {
+                                        // Return cached response
+                                        return cachedResponse;
+                                    }
+
+                                    return caches.open(RUNTIME_CACHE).then(cache => {
+                                        return fetch(event.request)
+                                            .then(response => {
+                                                // Cache valid responses
+                                                if (response.status === 200 && 
+                                                    !event.request.url.includes('google.com') && 
+                                                    !event.request.url.includes('flightaware.com') && 
+                                                    !event.request.url.includes('flightradar24.com')) {
+                                                    
+                                                    // Clone the response as it can only be consumed once
+                                                    cache.put(event.request, response.clone());
+                                                }
+                                                return response;
+                                            })
+                                            .catch(() => {
+                                                // For navigation requests, return the offline HTML
+                                                if (event.request.mode === 'navigate') {
+                                                    return caches.match('/');
+                                                }
+                                                
+                                                // Otherwise, just indicate failure
+                                                return new Response('Network error happened', {
+                                                    status: 408,
+                                                    headers: { 'Content-Type': 'text/plain' }
+                                                });
+                                            });
+                                    });
+                                })
+                            );
+                        });
+
+                        // Handle messages from the main thread
+                        self.addEventListener('message', event => {
+                            if (event.data && event.data.action === 'skipWaiting') {
+                                self.skipWaiting();
+                            }
+                        });
+                    `;
+                    
+                    // Create a Blob from the service worker content
+                    const swBlob = new Blob([swContent], {type: 'text/javascript'});
+                    
+                    // Create a URL for the Blob
+                    const swBlobUrl = URL.createObjectURL(swBlob);
+                    
+                    // Register the service worker using the Blob URL
+                    navigator.serviceWorker.register(swBlobUrl)
+                        .then(registration => {
+                            console.log('Service Worker registered with scope:', registration.scope);
+                            window.serviceWorkerRegistration = registration;
+                            
+                            // Check for updates
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                document.getElementById('update-available').classList.remove('hidden');
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Service Worker registration failed:', error);
+                        });
+                });
             }
-            
-            const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
-            window.open(googleSearchUrl, '_blank');
-            
-            // Clear the search box after searching
-            document.getElementById('google-search-box').value = '';
-        });
+        }
+
+        // Initialize the app when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
