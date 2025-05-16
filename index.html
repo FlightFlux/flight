@@ -7,18 +7,18 @@
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#0063c6">
-    <meta name="description" content="Essential tools for airline staff - flight tracking, quick links, and more">
+    <meta name="description" content="Essential tools for airline staff - flight tracking, airport info, and quick links">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="AA Staff Portal">
     <meta name="application-name" content="AA Staff Portal">
     
-    <!-- Manifest (Inline Data URI) -->
-    <link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;Airline Staff Portal&quot;,&quot;short_name&quot;:&quot;AA Staff&quot;,&quot;description&quot;:&quot;Essential tools for airline staff&quot;,&quot;start_url&quot;:&quot;/index.html&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0063c6&quot;,&quot;theme_color&quot;:&quot;#0063c6&quot;,&quot;orientation&quot;:&quot;portrait-primary&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E✈️%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
-    
-    <!-- Icons -->
+    <!-- Base64 Icons -->
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7inJc8L3RleHQ+PC9zdmc+">
     <link rel="apple-touch-icon" href="data:image/png;base64,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">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
+    
+    <!-- Inline Manifest (properly escaped JSON) -->
+    <link rel="manifest" id="manifest-placeholder">
     
     <!-- External CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -388,12 +388,6 @@
             background-color: #1a365d;
         }
 
-        /* Result Containers */
-        .result-container {
-            margin-top: 10px;
-            font-size: 0.85rem;
-        }
-
         /* Offline Indicator */
         .offline-indicator {
             background-color: var(--warning-color);
@@ -573,37 +567,46 @@
             background-color: var(--primary-color);
         }
 
-        /* Airport Info Styles */
-        .airport-info {
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-
-        .airport-info p {
-            margin-bottom: 6px;
-        }
-
-        .action-links {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .action-links a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 500;
+        /* Icon Loading Spinner */
+        .loading {
             display: flex;
             align-items: center;
+            justify-content: center;
+            margin: 10px 0;
         }
 
-        .action-links a i {
-            margin-right: 4px;
+        .loading i {
+            margin-right: 8px;
+            animation: spin 1s linear infinite;
         }
 
-        .action-links a:hover {
-            text-decoration: underline;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* PWA Install Button */
+        .install-button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 16px;
+            border-radius: var(--border-radius);
+            margin: 10px auto;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: var(--box-shadow);
+        }
+
+        .install-button i {
+            margin-right: 8px;
+        }
+
+        .install-button:hover {
+            background-color: var(--accent-dark);
         }
     </style>
 </head>
@@ -633,6 +636,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- Install PWA Button -->
+        <button id="install-pwa" class="install-button">
+            <i class="fas fa-download"></i> Install App
+        </button>
 
         <!-- Time Display -->
         <div class="time-display">
@@ -674,12 +682,12 @@
             </form>
         </div>
 
-        <!-- Baggage Tracker -->
+        <!-- Airport Lookup -->
         <div class="mini-card">
-            <div class="mini-title"><i class="fas fa-suitcase"></i>Baggage Lookup</div>
-            <form id="baggage-lookup-form" class="compact-form">
-                <input type="text" id="baggage-tag" class="compact-input" placeholder="Bag Tag #" pattern="[0-9]*" inputmode="numeric">
-                <button type="submit" aria-label="Search Baggage"><i class="fas fa-search"></i>Go</button>
+            <div class="mini-title"><i class="fas fa-info-circle"></i>Airport Info</div>
+            <form id="airport-info-form" class="compact-form">
+                <input type="text" id="airport-code" class="compact-input" placeholder="Airport Code (e.g. DFW)" maxlength="3">
+                <button type="submit" aria-label="Get Airport Info"><i class="fas fa-plane-arrival"></i>Go</button>
             </form>
         </div>
 
@@ -719,14 +727,6 @@
                     <i class="fas fa-tachometer-alt"></i>
                     <span>AirPortal</span>
                 </a>
-                <a href="https://prime.app.bags.aa.com/web/" class="link-item" target="_blank">
-                    <i class="fas fa-suitcase"></i>
-                    <span>PRIME</span>
-                </a>
-                <a href="https://hcchold.replit.app/" class="link-item" target="_blank">
-                    <i class="fas fa-clock"></i>
-                    <span>HCC Tool</span>
-                </a>
                 <a href="https://newjetnet.aa.com/" class="link-item" target="_blank">
                     <i class="fas fa-id-badge"></i>
                     <span>Jetnet</span>
@@ -735,6 +735,14 @@
                     <i class="fas fa-shield-alt"></i>
                     <span>LOSA</span>
                 </a>
+                <a href="https://flightaware.com/live/fleet/AAL" class="link-item" target="_blank">
+                    <i class="fas fa-plane"></i>
+                    <span>Fleet</span>
+                </a>
+                <a href="https://www.faa.gov/air_traffic/weather/asos" class="link-item" target="_blank">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span>Weather</span>
+                </a>
                 <a href="#" class="link-item" id="add-link-btn">
                     <i class="fas fa-plus"></i>
                     <span>Add Link</span>
@@ -742,19 +750,9 @@
             </div>
         </div>
 
-        <!-- Airport Info Card -->
-        <div class="card">
-            <h2><i class="fas fa-info-circle"></i>Airport Info</h2>
-            <form id="airport-info-form" class="compact-form">
-                <input type="text" id="airport-code" class="compact-input" placeholder="Airport Code (e.g. DFW)" maxlength="3">
-                <button type="submit" aria-label="Get Airport Info"><i class="fas fa-search"></i>Go</button>
-            </form>
-            <div id="airport-info-result" class="result-container"></div>
-        </div>
-
         <!-- App Status -->
         <div class="footer">
-            <span>Airline Staff Portal • v1.2.5</span>
+            <span>Airline Staff Portal • v1.3.0</span>
             <span id="update-available" class="update-badge hidden">Update Available</span>
         </div>
     </div>
@@ -781,7 +779,6 @@
                     <select id="link-icon">
                         <option value="fa-link">Link</option>
                         <option value="fa-plane">Plane</option>
-                        <option value="fa-suitcase">Suitcase</option>
                         <option value="fa-clipboard">Clipboard</option>
                         <option value="fa-calendar">Calendar</option>
                         <option value="fa-user">User</option>
@@ -796,6 +793,69 @@
 
     <!-- Inline JavaScript -->
     <script>
+        // Constants
+        const APP_VERSION = '1.3.0';
+        const CACHE_VERSION = 'airline-staff-portal-v1.3.0';
+        const CUSTOM_LINKS_KEY = 'airline-staff-portal-custom-links';
+        
+        // Create the manifest
+        const manifestData = {
+            name: "Airline Staff Portal",
+            short_name: "AA Staff",
+            description: "Essential tools for airline staff",
+            id: "/index.html",
+            start_url: "./index.html",
+            display: "standalone",
+            background_color: "#0063c6",
+            theme_color: "#0063c6",
+            orientation: "portrait-primary",
+            icons: [
+                {
+                    src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7inJc8L3RleHQ+PC9zdmc+",
+                    sizes: "192x192",
+                    type: "image/svg+xml",
+                    purpose: "any"
+                },
+                {
+                    src: "data:image/png;base64,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",
+                    sizes: "512x512",
+                    type: "image/png",
+                    purpose: "any maskable"
+                }
+            ],
+            shortcuts: [
+                {
+                    name: "Track Flight",
+                    short_name: "Flight",
+                    description: "Track a flight quickly",
+                    url: "./index.html?action=track_flight",
+                    icons: [{ 
+                        src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7inJc8L3RleHQ+PC9zdmc+", 
+                        sizes: "192x192" 
+                    }]
+                },
+                {
+                    name: "Airport Info",
+                    short_name: "Airport",
+                    description: "Look up airport information",
+                    url: "./index.html?action=airport_info",
+                    icons: [{ 
+                        src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn5OG8J+TiTwvdGV4dD48L3N2Zz4=", 
+                        sizes: "192x192" 
+                    }]
+                }
+            ],
+            scope: "./",
+            related_applications: [],
+            prefer_related_applications: false,
+            categories: ["utilities", "productivity"]
+        };
+
+        // Create Blob and Object URL for manifest
+        const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        document.getElementById('manifest-placeholder').href = manifestURL;
+
         // DOM elements
         const localTimeElement = document.getElementById('local-time');
         const localDateElement = document.getElementById('local-date');
@@ -804,21 +864,18 @@
         const darkModeToggle = document.getElementById('dark-mode-toggle');
         const smallScreenToggle = document.getElementById('small-screen-toggle');
         const flightTrackerForm = document.getElementById('flight-tracker-form');
-        const baggageLookupForm = document.getElementById('baggage-lookup-form');
         const googleSearchForm = document.getElementById('google-search-form');
         const airportInfoForm = document.getElementById('airport-info-form');
-        const airportInfoResult = document.getElementById('airport-info-result');
         const addLinkBtn = document.getElementById('add-link-btn');
         const addLinkModal = document.getElementById('add-link-modal');
         const closeModalBtn = document.querySelector('.close-modal');
         const addLinkForm = document.getElementById('add-link-form');
         const notificationElement = document.getElementById('notification');
+        const installButton = document.getElementById('install-pwa');
 
-        // Custom links storage key
-        const CUSTOM_LINKS_KEY = 'airline-staff-portal-custom-links';
-        const APP_VERSION = '1.2.5';
-        const CACHE_VERSION = 'airline-staff-portal-v1.2.5';
-
+        // PWA install event
+        let deferredPrompt;
+        
         // Initialize application
         function initApp() {
             // Initialize clock
@@ -844,6 +901,49 @@
 
             // Process URL parameters (for shortcuts)
             processUrlParams();
+            
+            // Setup PWA installation
+            setupPWAInstall();
+        }
+
+        // Setup PWA install prompt
+        function setupPWAInstall() {
+            // Listen for the beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent Chrome 67 and earlier from automatically showing the prompt
+                e.preventDefault();
+                // Stash the event so it can be triggered later
+                deferredPrompt = e;
+                // Update UI to notify the user they can add to home screen
+                installButton.style.display = 'flex';
+            });
+
+            // Installation button click handler
+            installButton.addEventListener('click', async () => {
+                if (!deferredPrompt) {
+                    return;
+                }
+                // Show the install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                const { outcome } = await deferredPrompt.userChoice;
+                // Optionally, send analytics event with outcome of user choice
+                console.log(`User response to the install prompt: ${outcome}`);
+                // We've used the prompt, and can't use it again, throw it away
+                deferredPrompt = null;
+                // Hide the install button
+                installButton.style.display = 'none';
+            });
+
+            // Listen for successful install
+            window.addEventListener('appinstalled', (evt) => {
+                // Log install to analytics
+                console.log('INSTALL: Success');
+                // Hide the install button
+                installButton.style.display = 'none';
+                // Show notification
+                showNotification('App successfully installed!', 'success');
+            });
         }
 
         // Process URL parameters
@@ -853,8 +953,8 @@
             
             if (action === 'track_flight') {
                 document.getElementById('flight-number').focus();
-            } else if (action === 'baggage_lookup') {
-                document.getElementById('baggage-tag').focus();
+            } else if (action === 'airport_info') {
+                document.getElementById('airport-code').focus();
             }
         }
 
@@ -950,21 +1050,6 @@
                 showNotification('Opening flight tracker', 'success');
             });
 
-            // Baggage lookup form
-            baggageLookupForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const bagTagNumber = document.getElementById('baggage-tag').value;
-                
-                if (!bagTagNumber) {
-                    showNotification('Please enter a bag tag number', 'error');
-                    return;
-                }
-                
-                // In a real environment, this would point to your internal baggage system
-                window.open(`https://prime.app.bags.aa.com/web/?bagtag=${bagTagNumber}`, '_blank');
-                showNotification('Opening baggage search', 'success');
-            });
-
             // Google search form
             googleSearchForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -988,7 +1073,10 @@
                     return;
                 }
                 
-                fetchAirportInfo(airportCode);
+                // Redirect to FlightAware airport page
+                const flightAwareUrl = `https://flightaware.com/live/airport/${airportCode}`;
+                window.open(flightAwareUrl, '_blank');
+                showNotification(`Opening ${airportCode} on FlightAware`, 'success');
             });
 
             // Add link button
@@ -1016,91 +1104,6 @@
                 // Force reload from server, not cache
                 window.location.reload(true);
             });
-        }
-
-        // Fetch airport information
-        async function fetchAirportInfo(airportCode) {
-            airportInfoResult.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
-            
-            try {
-                // In a real app, you would fetch from an API
-                // For demo purposes, we'll use some hardcoded data
-                const airports = {
-                    'DFW': {
-                        name: 'Dallas/Fort Worth International Airport',
-                        city: 'Dallas',
-                        country: 'United States',
-                        terminals: 5,
-                        timezone: 'America/Chicago'
-                    },
-                    'JFK': {
-                        name: 'John F. Kennedy International Airport',
-                        city: 'New York',
-                        country: 'United States',
-                        terminals: 6,
-                        timezone: 'America/New_York'
-                    },
-                    'LAX': {
-                        name: 'Los Angeles International Airport',
-                        city: 'Los Angeles',
-                        country: 'United States',
-                        terminals: 9,
-                        timezone: 'America/Los_Angeles'
-                    },
-                    'ORD': {
-                        name: "O'Hare International Airport",
-                        city: 'Chicago',
-                        country: 'United States',
-                        terminals: 4,
-                        timezone: 'America/Chicago'
-                    },
-                    'LHR': {
-                        name: 'London Heathrow Airport',
-                        city: 'London',
-                        country: 'United Kingdom',
-                        terminals: 5,
-                        timezone: 'Europe/London'
-                    }
-                };
-                
-                // Simulate network delay
-                await new Promise(resolve => setTimeout(resolve, 500));
-                
-                if (airports[airportCode]) {
-                    const airport = airports[airportCode];
-                    airportInfoResult.innerHTML = `
-                        <div class="airport-info">
-                            <p><strong>${airport.name} (${airportCode})</strong></p>
-                            <p>${airport.city}, ${airport.country}</p>
-                            <p>Terminals: ${airport.terminals}</p>
-                            <p>Timezone: ${airport.timezone}</p>
-                            <div class="action-links">
-                                <a href="https://flightaware.com/live/airport/${airportCode}" target="_blank">
-                                    <i class="fas fa-plane"></i> Flight Status
-                                </a>
-                                <a href="https://www.google.com/maps/search/${encodeURIComponent(airport.name)}" target="_blank">
-                                    <i class="fas fa-map-marker-alt"></i> Map
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    airportInfoResult.innerHTML = `
-                        <div class="error-message">
-                            <p>No information found for airport code: ${airportCode}</p>
-                        </div>
-                    `;
-                    showNotification(`No data for ${airportCode}`, 'warning');
-                }
-            } catch (error) {
-                console.error('Error fetching airport info:', error);
-                airportInfoResult.innerHTML = `
-                    <div class="error-message">
-                        <p>Error loading airport information. Please try again.</p>
-                    </div>
-                `;
-                showNotification('Error loading airport data', 'error');
-            }
         }
 
         // Load custom links from localStorage
@@ -1244,104 +1247,124 @@
             }, 3000);
         }
 
-        // Register service worker
+        // Create and Register Service Worker
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    // Create an inline service worker with the content below
-                    const swContent = `
-                        // Service Worker for Airline Staff Portal PWA
-                        const CACHE_NAME = '${CACHE_VERSION}';
-                        const RUNTIME_CACHE = 'runtime-cache';
+                // Create the Service Worker content
+                const swContent = `
+                    // Service Worker for Airline Staff Portal PWA
+                    const CACHE_NAME = '${CACHE_VERSION}';
+                    const APP_SHELL = [
+                        './',
+                        './index.html',
+                        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+                        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2'
+                    ];
 
-                        // Installation event - cache essential assets
-                        self.addEventListener('install', event => {
-                            event.waitUntil(
-                                caches.open(CACHE_NAME)
-                                    .then(cache => {
-                                        // Cache the main HTML document
-                                        return cache.add('/');
-                                    })
-                                    .then(() => self.skipWaiting())
-                            );
-                        });
-
-                        // Activation event - clean up old caches
-                        self.addEventListener('activate', event => {
-                            const currentCaches = [CACHE_NAME, RUNTIME_CACHE];
-                            event.waitUntil(
-                                caches.keys().then(cacheNames => {
-                                    return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
-                                }).then(cachesToDelete => {
-                                    return Promise.all(cachesToDelete.map(cacheToDelete => {
-                                        return caches.delete(cacheToDelete);
-                                    }));
-                                }).then(() => self.clients.claim())
-                            );
-                        });
-
-                        // Fetch event - serve from cache or network with cache fallback
-                        self.addEventListener('fetch', event => {
-                            // Skip cross-origin requests
-                            if (!event.request.url.startsWith(self.location.origin) && 
-                                !event.request.url.includes('cdnjs.cloudflare.com')) {
-                                return;
-                            }
-                            
-                            event.respondWith(
-                                caches.match(event.request).then(cachedResponse => {
-                                    if (cachedResponse) {
-                                        // Return cached response
-                                        return cachedResponse;
-                                    }
-
-                                    return caches.open(RUNTIME_CACHE).then(cache => {
-                                        return fetch(event.request)
-                                            .then(response => {
-                                                // Cache valid responses
-                                                if (response.status === 200 && 
-                                                    !event.request.url.includes('google.com') && 
-                                                    !event.request.url.includes('flightaware.com') && 
-                                                    !event.request.url.includes('flightradar24.com')) {
-                                                    
-                                                    // Clone the response as it can only be consumed once
-                                                    cache.put(event.request, response.clone());
-                                                }
-                                                return response;
-                                            })
-                                            .catch(() => {
-                                                // For navigation requests, return the offline HTML
-                                                if (event.request.mode === 'navigate') {
-                                                    return caches.match('/');
-                                                }
-                                                
-                                                // Otherwise, just indicate failure
-                                                return new Response('Network error happened', {
-                                                    status: 408,
-                                                    headers: { 'Content-Type': 'text/plain' }
-                                                });
-                                            });
-                                    });
+                    // Install event handler - cache the app shell
+                    self.addEventListener('install', event => {
+                        console.log('[Service Worker] Installing Service Worker...');
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => {
+                                    console.log('[Service Worker] Caching App Shell');
+                                    return cache.addAll(APP_SHELL);
                                 })
-                            );
-                        });
+                                .then(() => {
+                                    console.log('[Service Worker] Successfully installed');
+                                    return self.skipWaiting();
+                                })
+                        );
+                    });
 
-                        // Handle messages from the main thread
-                        self.addEventListener('message', event => {
-                            if (event.data && event.data.action === 'skipWaiting') {
-                                self.skipWaiting();
-                            }
-                        });
-                    `;
-                    
-                    // Create a Blob from the service worker content
-                    const swBlob = new Blob([swContent], {type: 'text/javascript'});
-                    
-                    // Create a URL for the Blob
-                    const swBlobUrl = URL.createObjectURL(swBlob);
-                    
-                    // Register the service worker using the Blob URL
-                    navigator.serviceWorker.register(swBlobUrl)
+                    // Activate event handler - clean up old caches
+                    self.addEventListener('activate', event => {
+                        console.log('[Service Worker] Activating Service Worker...');
+                        event.waitUntil(
+                            caches.keys()
+                                .then(keyList => {
+                                    return Promise.all(keyList.map(key => {
+                                        if (key !== CACHE_NAME) {
+                                            console.log('[Service Worker] Removing old cache', key);
+                                            return caches.delete(key);
+                                        }
+                                    }));
+                                })
+                                .then(() => {
+                                    console.log('[Service Worker] Claiming clients');
+                                    return self.clients.claim();
+                                })
+                        );
+                        return self.clients.claim();
+                    });
+
+                    // Fetch event handler - serve from cache, fallback to network
+                    self.addEventListener('fetch', event => {
+                        // Skip cross-origin requests
+                        if (!event.request.url.startsWith(self.location.origin) && 
+                            !event.request.url.includes('cdnjs.cloudflare.com')) {
+                            return;
+                        }
+                        
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => {
+                                    if (response) {
+                                        // Return cached response
+                                        return response;
+                                    }
+                                    
+                                    // If not in cache, fetch from network
+                                    return fetch(event.request)
+                                        .then(networkResponse => {
+                                            // Don't cache third-party resources
+                                            if (!event.request.url.includes('google.com') && 
+                                                !event.request.url.includes('flightaware.com') && 
+                                                !event.request.url.includes('flightradar24.com')) {
+                                                // Clone the response before using it
+                                                const responseToCache = networkResponse.clone();
+                                                caches.open(CACHE_NAME)
+                                                    .then(cache => {
+                                                        cache.put(event.request, responseToCache);
+                                                    });
+                                            }
+                                            return networkResponse;
+                                        })
+                                        .catch(() => {
+                                            // For navigation requests, return the offline page
+                                            if (event.request.mode === 'navigate') {
+                                                return caches.match('./index.html');
+                                            }
+                                            // Return a default response for other requests
+                                            return new Response('Network unavailable', {
+                                                status: 503,
+                                                statusText: 'Service Unavailable',
+                                                headers: new Headers({
+                                                    'Content-Type': 'text/plain'
+                                                })
+                                            });
+                                        });
+                                })
+                        );
+                    });
+
+                    // Message event handler
+                    self.addEventListener('message', event => {
+                        if (event.data.action === 'skipWaiting') {
+                            self.skipWaiting();
+                        }
+                    });
+                `;
+
+                // Create a blob from the service worker content
+                const swBlob = new Blob([swContent], {type: 'application/javascript'});
+                
+                // Create a URL for the blob
+                const swURL = URL.createObjectURL(swBlob);
+                
+                // Register the service worker using the blob URL
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register(swURL)
                         .then(registration => {
                             console.log('Service Worker registered with scope:', registration.scope);
                             window.serviceWorkerRegistration = registration;
@@ -1349,7 +1372,21 @@
                             // Check for updates
                             registration.addEventListener('updatefound', () => {
                                 const newWorker = registration.installing;
+                                console.log('Service Worker update found!');
                                 document.getElementById('update-available').classList.remove('hidden');
+                                
+                                // Reload to update when clicked
+                                document.getElementById('update-available').addEventListener('click', () => {
+                                    if (newWorker) {
+                                        newWorker.postMessage({ action: 'skipWaiting' });
+                                    }
+                                    window.location.reload();
+                                });
+                            });
+
+                            // Handle service worker updates
+                            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                                console.log('Service Worker controller changed!');
                             });
                         })
                         .catch(error => {
