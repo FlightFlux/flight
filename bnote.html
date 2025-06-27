@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baggage Tag Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* Transitions */
+        .note-item, .notification-toast, #confirm-modal-backdrop, #confirm-modal-box, .step-view {
+            transition: all 0.3s ease-in-out;
+        }
+        .note-item { opacity: 0; transform: translateY(20px); }
+        .note-item.visible { opacity: 1; transform: translateY(0); }
+        .notification-toast { opacity: 0; transform: translateY(20px); }
+        .notification-toast.visible { opacity: 1; transform: translateY(0); }
+        
+        /* Modal styles */
+        #confirm-modal-backdrop { opacity: 0; pointer-events: none; }
+        #confirm-modal-backdrop.visible { opacity: 1; pointer-events: auto; }
+        #confirm-modal-box { opacity: 0; transform: scale(0.95); }
+        #confirm-modal-box.visible { opacity: 1; transform: scale(1); }
+
+        /* Toggle switch */
+        .toggle-bg:after {
+            content: '';
+            @apply absolute top-0.5 left-0.5 bg-white border border-gray-300 rounded-full h-5 w-5 transition shadow-sm;
+        }
+        input:checked + .toggle-bg:after {
+            transform: translateX(100%);
+            @apply border-white;
+        }
+        input:checked + .toggle-bg {
+            @apply bg-red-600;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <div id="app-container" class="max-w-md mx-auto min-h-screen bg-white shadow-lg flex flex-col">
+        <!-- Header -->
+        <header class="bg-red-600 text-white p-4 text-center shadow-md sticky top-0 z-10">
+            <h1 class="text-xl font-bold">Baggage Note Taker</h1>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow p-4 md:p-6">
+            <!-- Step 1: Barcode Entry -->
+            <div id="step1-barcode" class="step-view">
+                <section class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="text-lg font-semibold text-slate-700">1. Scan Baggage Tag</h2>
+                        <label for="auto-mode-toggle" class="flex items-center cursor-pointer">
+                            <span class="mr-3 text-sm font-medium text-gray-900">Auto Mode</span>
+                            <div class="relative">
+                                <input type="checkbox" id="auto-mode-toggle" class="sr-only">
+                                <div class="toggle-bg block bg-gray-200 w-11 h-6 rounded-full"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="relative">
+                         <input type="text" id="barcode-input" placeholder="Scan or type barcode..." class="w-full p-4 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 text-lg transition-shadow">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-1.036.84-1.875 1.875-1.875h.375c1.036 0 1.875.84 1.875 1.875v14.25c0 1.036-.84 1.875-1.875 1.875h-.375c-1.036 0-1.875-.84-1.875-1.875V4.875zM16.125 4.875c0-1.036.84-1.875 1.875-1.875h.375c1.036 0 1.875.84 1.875 1.875v14.25c0 1.036-.84 1.875-1.875 1.875h-.375c-1.036 0-1.875-.84-1.875-1.875V4.875zM8.25 3h7.5M8.25 21h7.5" /></svg>
+                    </div>
+                </section>
+                 <button id="next-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                </button>
+            </div>
+            
+            <!-- Step 2: Reason Selection -->
+            <div id="step2-reason" class="step-view hidden">
+                <section class="mb-4">
+                     <p class="text-sm text-slate-500">Tag Scanned:</p>
+                     <p id="captured-barcode" class="font-bold text-lg text-slate-800 break-words mb-4"></p>
+                     <h2 class="text-lg font-semibold mb-2 text-slate-700">2. Select Reason</h2>
+                     <select id="reason-select" class="w-full p-4 bg-white border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-shadow">
+                        <option value="">-- Choose a reason --</option>
+                        <option value="Damaged Bag">Damaged Bag</option>
+                        <option value="Misrouted Tag">Misrouted Tag</option>
+                        <option value="Security Check">Security Check</option>
+                        <option value="Late Arrival">Late Arrival</option>
+                        <option value="No-Show Passenger">No-Show Passenger</option>
+                        <option value="High-Value Item">High-Value Item</option>
+                        <option value="Other">Other (Specify below)</option>
+                    </select>
+                    <textarea id="other-reason" placeholder="Specify other reason..." class="w-full p-3 mt-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 hidden transition-all"></textarea>
+                </section>
+                <div class="flex gap-4">
+                     <button id="back-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all flex-grow-0">
+                        Back
+                    </button>
+                    <button id="save-note-btn" class="flex-grow bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg>
+                        Save Note
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Notes List Section -->
+        <aside class="flex-grow bg-slate-50 p-4 md:p-6 border-t border-slate-200">
+             <!-- Statistics Section (Made smaller) -->
+             <section id="stats-section" class="mb-4">
+                <div class="flex justify-around items-center bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <div class="text-center">
+                        <p class="font-semibold text-slate-500 text-xs">TODAY</p>
+                        <p id="stats-today" class="text-xl font-bold text-red-600">0</p>
+                    </div>
+                    <div class="border-l h-8 border-slate-200"></div>
+                    <div class="text-center">
+                        <p class="font-semibold text-slate-500 text-xs">TOTAL</p>
+                        <p id="stats-total" class="text-xl font-bold text-slate-700">0</p>
+                    </div>
+                </div>
+             </section>
+
+             <div class="flex justify-between items-center mb-2 pt-4 border-t">
+                <h2 class="text-lg font-semibold text-slate-700">Saved Notes</h2>
+             </div>
+             <!-- Search Bar -->
+             <div class="relative mb-4">
+                <input type="text" id="search-input" placeholder="Search by barcode..." class="w-full p-3 pl-10 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+             </div>
+             <div id="notes-container" class="space-y-3 max-h-[40vh] overflow-y-auto pr-2"></div>
+             <div id="no-notes-msg" class="text-center text-slate-500 py-10 hidden">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                 <p class="mt-2 font-semibold">No notes yet</p>
+                 <p class="text-sm">Scan a tag to get started!</p>
+            </div>
+            <div id="no-search-results-msg" class="text-center text-slate-500 py-10 hidden">
+                <p class="mt-2 font-semibold">No notes found</p>
+                <p class="text-sm">Try a different search term.</p>
+           </div>
+        </aside>
+
+        <!-- Footer -->
+        <footer class="p-2 text-center bg-white border-t">
+            <p class="text-xs text-slate-400">Data is saved securely on this device.</p>
+        </footer>
+    </div>
+    
+    <div id="notification-container" class="fixed bottom-4 right-4 space-y-2 z-50 w-full max-w-xs"></div>
+    <div id="confirm-modal-backdrop" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div id="confirm-modal-box" class="bg-white rounded-lg shadow-xl w-full max-w-sm p-6 text-center">
+            <h3 class="text-lg font-bold text-slate-800">Delete Note?</h3>
+            <p class="text-slate-600 my-2">This action cannot be undone. Are you sure?</p>
+            <div class="flex gap-4 mt-6">
+                <button id="confirm-delete-btn" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-4 rounded-lg">Yes, Delete</button>
+                <button id="cancel-delete-btn" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2.5 px-4 rounded-lg">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM ELEMENTS ---
+            const step1View = document.getElementById('step1-barcode');
+            const step2View = document.getElementById('step2-reason');
+            const barcodeInput = document.getElementById('barcode-input');
+            const capturedBarcodeEl = document.getElementById('captured-barcode');
+            const autoModeToggle = document.getElementById('auto-mode-toggle');
+            const nextBtn = document.getElementById('next-btn');
+            const backBtn = document.getElementById('back-btn');
+            const reasonSelect = document.getElementById('reason-select');
+            const otherReasonText = document.getElementById('other-reason');
+            const saveNoteBtn = document.getElementById('save-note-btn');
+            const notesContainer = document.getElementById('notes-container');
+            const searchInput = document.getElementById('search-input');
+            const noNotesMsg = document.getElementById('no-notes-msg');
+            const noSearchResultsMsg = document.getElementById('no-search-results-msg');
+            const confirmModalBackdrop = document.getElementById('confirm-modal-backdrop');
+            const confirmModalBox = document.getElementById('confirm-modal-box');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            const statsTodayEl = document.getElementById('stats-today');
+            const statsTotalEl = document.getElementById('stats-total');
+
+
+            // --- STATE ---
+            const STORAGE_KEY = 'baggageNotesApp_notes';
+            let noteToDeleteId = null;
+            let tempBarcode = '';
+            let scannerTimeout = null;
+            const SCANNER_DELAY = 300; // ms - Increased delay slightly
+
+            // --- CORE LOGIC ---
+            function goToStep2() {
+                tempBarcode = barcodeInput.value.trim();
+                if (!tempBarcode) {
+                    showNotification("Please enter a barcode first.");
+                    return;
+                }
+                capturedBarcodeEl.textContent = tempBarcode;
+                step1View.classList.add('hidden');
+                step2View.classList.remove('hidden');
+                reasonSelect.focus();
+            }
+
+            function goToStep1() {
+                tempBarcode = '';
+                barcodeInput.value = '';
+                reasonSelect.value = '';
+                otherReasonText.classList.add('hidden');
+                step2View.classList.add('hidden');
+                step1View.classList.remove('hidden');
+                barcodeInput.focus();
+            }
+
+            // --- NOTIFICATION SYSTEM ---
+            function showNotification(message, type = 'error') {
+                const container = document.getElementById('notification-container');
+                const toast = document.createElement('div');
+                const bgColor = type === 'success' ? 'bg-green-600' : 'bg-red-600';
+                toast.className = `notification-toast p-4 text-white rounded-lg shadow-xl ${bgColor}`;
+                toast.textContent = message;
+                container.appendChild(toast);
+                requestAnimationFrame(() => toast.classList.add('visible'));
+                setTimeout(() => {
+                    toast.classList.remove('visible');
+                    toast.addEventListener('transitionend', () => toast.remove());
+                }, 3500);
+            }
+
+            // --- DATA HANDLING ---
+            function getNotesFromStorage() {
+                const storedNotes = localStorage.getItem(STORAGE_KEY);
+                try {
+                    const notes = storedNotes ? JSON.parse(storedNotes) : [];
+                    return notes.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                } catch (e) { console.error("Error parsing notes:", e); return []; }
+            }
+            function saveNotesToStorage(notes) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+            }
+
+            // --- RENDERING ---
+            function renderNotes(filter = '') {
+                const notes = getNotesFromStorage();
+                const searchTerm = filter.toLowerCase().trim();
+                const filteredNotes = searchTerm ? notes.filter(n => n.barcode.toLowerCase().includes(searchTerm)) : notes;
+                
+                notesContainer.innerHTML = '';
+                noNotesMsg.classList.toggle('hidden', notes.length > 0);
+                noSearchResultsMsg.classList.toggle('hidden', !searchTerm || filteredNotes.length > 0);
+                notesContainer.classList.toggle('hidden', filteredNotes.length === 0);
+                
+                if (filteredNotes.length > 0) {
+                    filteredNotes.forEach(note => {
+                        const noteEl = createNoteElement(note);
+                        notesContainer.appendChild(noteEl);
+                        setTimeout(() => noteEl.classList.add('visible'), 50);
+                    });
+                }
+                
+                // Update stats
+                const today = new Date().toLocaleDateString();
+                const notesTodayCount = notes.filter(n => new Date(n.timestamp).toLocaleDateString() === today).length;
+                statsTodayEl.textContent = notesTodayCount;
+                statsTotalEl.textContent = notes.length;
+            }
+
+            function createNoteElement(note) {
+                const div = document.createElement('div');
+                div.className = 'note-item bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex justify-between items-start gap-3';
+                const reasonText = note.reason === 'Other' && note.details ? `Other: ${note.details}` : note.reason;
+                const noteDate = new Date(note.timestamp);
+                div.innerHTML = `
+                    <div class="flex-grow min-w-0">
+                        <p class="font-bold text-slate-800 break-words">${note.barcode}</p>
+                        <p class="text-sm text-slate-600">${reasonText}</p>
+                        <p class="text-xs text-slate-400 mt-1">${noteDate.toLocaleString()}</p>
+                    </div>
+                    <button data-id="${note.id}" class="delete-note-btn text-slate-400 hover:text-red-500 transition-colors p-1 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>`;
+                div.querySelector('.delete-note-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    noteToDeleteId = e.currentTarget.dataset.id;
+                    showDeleteModal();
+                });
+                return div;
+            }
+            
+            // --- ACTIONS ---
+            function saveNote() {
+                const reason = reasonSelect.value;
+                const details = otherReasonText.value.trim();
+                if (!reason) { showNotification("Please select a reason."); return; }
+                if (reason === "Other" && !details) { showNotification("Please specify the other reason."); return; }
+                
+                const newNote = { id: crypto.randomUUID(), barcode: tempBarcode, reason, details, timestamp: new Date().toISOString() };
+                const notes = getNotesFromStorage();
+                notes.push(newNote);
+                saveNotesToStorage(notes);
+                showNotification("Note saved!", "success");
+                renderNotes();
+                goToStep1();
+                searchInput.value = '';
+            }
+            function deleteNote(noteId) {
+                let notes = getNotesFromStorage();
+                notes = notes.filter(note => note.id !== noteId);
+                saveNotesToStorage(notes);
+                showNotification("Note deleted.", "success");
+                renderNotes(searchInput.value);
+            }
+
+            // --- MODAL HANDLING ---
+            function showDeleteModal() {
+                confirmModalBackdrop.classList.add('visible');
+                confirmModalBox.classList.add('visible');
+            }
+            function hideDeleteModal() {
+                confirmModalBackdrop.classList.remove('visible');
+                confirmModalBox.classList.remove('visible');
+                noteToDeleteId = null;
+            }
+
+            // --- EVENT LISTENERS ---
+            nextBtn.addEventListener('click', goToStep2);
+            backBtn.addEventListener('click', goToStep1);
+            saveNoteBtn.addEventListener('click', saveNote);
+
+            barcodeInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); goToStep2(); }
+            });
+            
+            barcodeInput.addEventListener('input', () => {
+                if (autoModeToggle.checked) {
+                    clearTimeout(scannerTimeout);
+                    scannerTimeout = setTimeout(goToStep2, SCANNER_DELAY);
+                }
+            });
+
+            autoModeToggle.addEventListener('change', () => {
+                nextBtn.classList.toggle('hidden', autoModeToggle.checked);
+                barcodeInput.focus();
+            });
+
+            reasonSelect.addEventListener('change', () => {
+                otherReasonText.classList.toggle('hidden', reasonSelect.value !== 'Other');
+                if (reasonSelect.value === 'Other') otherReasonText.focus();
+            });
+            
+            searchInput.addEventListener('input', (e) => renderNotes(e.target.value));
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (noteToDeleteId) deleteNote(noteToDeleteId);
+                hideDeleteModal();
+            });
+            cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+            confirmModalBackdrop.addEventListener('click', (e) => {
+                if (e.target === confirmModalBackdrop) hideDeleteModal();
+            });
+
+            // --- INITIAL LOAD ---
+            renderNotes();
+            barcodeInput.focus();
+        });
+    </script>
+</body>
+</html>
